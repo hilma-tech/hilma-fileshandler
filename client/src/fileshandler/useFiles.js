@@ -2,7 +2,7 @@ import { useMemo, useEffect } from 'react';
 import FilesUploader from './FilesUploader';
 
 function useFiles() {
-    const filesUplader = useMemo(() => new FilesUploader, []);
+    const filesUplader = useMemo(() => new FilesUploader(), []);
 
     useEffect(() => {
         return filesUplader.deleteAll();
