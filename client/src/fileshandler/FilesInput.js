@@ -5,12 +5,17 @@ import FilesUploader from './FilesUploader';
 
 
 function FileInput(props) {
-    const { onChange, filesUploader, type, singleUpload = true } = props;
+    const { onChange, filesUploader, type, singleUpload = true, ...otherProps } = props;
 
     const lastUploadedFile = useRef(null);
 
     const handleChange = e => {
         const file = e.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
         const uploadRes = filesUploader.upload(file);
 
         onChange({
@@ -33,7 +38,7 @@ function FileInput(props) {
     const accept = useMemo(() => "." + ACCEPTS[type].join(", ."), [type]);
 
     return (
-        <input type="file" onChange={handleChange} accept={accept} />
+        <input type="file" onChange={handleChange} accept={accept} {...otherProps} />
     );
 }
 
