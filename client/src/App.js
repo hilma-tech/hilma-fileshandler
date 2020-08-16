@@ -14,11 +14,12 @@ function App() {
     await filesUploader.fetch("/hello", {
       method: "POST",
       body: JSON.stringify({
-          name: "michael",
-          message,
-          imageId: imageObj.id
+        name: "michael",
+        message,
+        imageId: imageObj.id,
+        audioId: audioObj.id
       })
-  });
+    });
   }
 
   const handleImageChange = e => {
