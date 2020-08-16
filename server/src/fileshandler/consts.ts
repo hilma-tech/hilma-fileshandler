@@ -35,3 +35,5 @@ export const MIME_TYPES = {
         mov: "video/quicktime",
     }
 }
+
+export const FILESHANDLER_OPTIONS_SIGN = "filesHandlerOptionsSign";

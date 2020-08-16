@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
-import { FILE_TYPES } from './consts';
+import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
 
 //services
 import { ImageService } from './services/image.service';
@@ -34,7 +34,7 @@ export class FilesHandlerModule {
             module: FilesHandlerModule,
             providers: [
                 {
-                    provide: "CONFIG_OPTIONS",
+                    provide: FILESHANDLER_OPTIONS_SIGN,
                     useValue: options
                 }
             ]
