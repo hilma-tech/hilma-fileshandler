@@ -11,7 +11,14 @@ function App() {
   const [message, setMessage] = useState("");
 
   const send = async () => {
-    await filesUploader.fetch("/");
+    await filesUploader.fetch("/hello", {
+      method: "POST",
+      body: JSON.stringify({
+          name: "michael",
+          message,
+          imageId: imageObj.id
+      })
+  });
   }
 
   const handleImageChange = e => {
