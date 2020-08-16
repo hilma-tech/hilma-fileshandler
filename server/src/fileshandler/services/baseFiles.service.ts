@@ -35,9 +35,11 @@ export abstract class BaseFilesService {
 
         const fileName = await this.createUniqueFileName(fileAndExt.extension);
         const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileAndExt.extension);
-        // const fd = await fs.promises.open(fileAbsolutePath, "w");
+
         await fs.promises.writeFile(fileAbsolutePath, fileAndExt.file.buffer);
-        console.log(fileAbsolutePath)
+
+        const filePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
+        return filePath;
     }
 
     /**
