@@ -4,12 +4,27 @@ import * as path from 'path';
 
 import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES } from './consts';
+
+//services
 import { ImageService } from './services/image.service';
 import { AudioService } from './services/audio.service';
 import { FileService } from './services/file.service';
 import { VideoService } from './services/video.service';
 
-@Module({})
+@Module({
+    providers: [
+        ImageService,
+        AudioService,
+        FileService,
+        VideoService
+    ],
+    exports: [
+        ImageService,
+        AudioService,
+        FileService,
+        VideoService
+    ]
+})
 export class FilesHandlerModule {
     static register(options: FilesHandlerOptions): DynamicModule {
 
@@ -21,17 +36,7 @@ export class FilesHandlerModule {
                 {
                     provide: "CONFIG_OPTIONS",
                     useValue: options
-                },
-                ImageService,
-                AudioService,
-                FileService,
-                VideoService
-            ],
-            exports: [
-                ImageService,
-                AudioService,
-                FileService,
-                VideoService
+                }
             ]
         }
     }
