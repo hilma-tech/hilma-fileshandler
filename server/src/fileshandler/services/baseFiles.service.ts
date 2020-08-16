@@ -17,8 +17,5 @@ export abstract class BaseFilesService {
                 return file.mimetype === mimetype;
             })
         ));
-
-        console.log(this.fileType)
-        console.log(this.files);
     }
 }
