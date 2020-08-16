@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { FileshandlerModule } from './fileshandler/fileshandler.module';
+import { FilesHandlerModule } from './fileshandler/fileshandler.module';
 
 @Module({
-  imports: [FileshandlerModule.register({ storageName: "filehandler-use" })],
+  imports: [FilesHandlerModule.register({ folder: "/home/michael/filesHandlerUploads/first" })],
   controllers: [AppController],
   providers: [AppService],
 })
