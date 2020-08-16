@@ -4,6 +4,10 @@ import * as path from 'path';
 
 import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES } from './consts';
+import { ImageService } from './services/image.service';
+import { AudioService } from './services/audio.service';
+import { FileService } from './services/file.service';
+import { VideoService } from './services/video.service';
 
 @Module({})
 export class FilesHandlerModule {
@@ -17,7 +21,17 @@ export class FilesHandlerModule {
                 {
                     provide: "CONFIG_OPTIONS",
                     useValue: options
-                }
+                },
+                ImageService,
+                AudioService,
+                FileService,
+                VideoService
+            ],
+            exports: [
+                ImageService,
+                AudioService,
+                FileService,
+                VideoService
             ]
         }
     }
@@ -25,7 +39,7 @@ export class FilesHandlerModule {
     static createFolders(options: FilesHandlerOptions): void {
         FILE_TYPES.forEach(fileType => {
             const folderPath = path.resolve(options.folder, fileType);
-            fs.mkdirSync(folderPath, {recursive: true});
+            fs.mkdirSync(folderPath, { recursive: true });
         });
     }
 }
