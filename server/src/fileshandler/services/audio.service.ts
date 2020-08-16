@@ -1,9 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { BaseFilesService } from './baseFiles.service';
 
-@Injectable({ scope: Scope.DEFAULT })
+@Injectable({ scope: Scope.REQUEST })
 export class AudioService extends BaseFilesService {
-    constructor() {
-        super("audio");
-    }
+    protected fileType: string = "audio";
 }
