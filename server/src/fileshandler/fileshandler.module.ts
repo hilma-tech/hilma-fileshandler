@@ -5,7 +5,9 @@ import * as path from 'path';
 import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
 
+//controllers
 import { ImageController } from './controllers/image.controller';
+import { AudioController } from './controllers/audio.controller';
 
 //services
 import { ImageService } from './services/image.service';
@@ -15,7 +17,8 @@ import { VideoService } from './services/video.service';
 
 @Module({
     controllers: [
-        ImageController
+        ImageController,
+        AudioController
     ],
     providers: [
         ImageService,
