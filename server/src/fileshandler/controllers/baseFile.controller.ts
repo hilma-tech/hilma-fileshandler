@@ -1,6 +1,6 @@
 import { Get, Req, Res, NotFoundException } from '@nestjs/common';
 import { Request, Response } from 'express'
-import { BaseFilesService } from '../services/baseFiles.service';
+import { BaseFilesService } from '../services/baseFile.service';
 import * as fs from 'fs';
 
 export abstract class BaseFileController {
@@ -12,7 +12,7 @@ export abstract class BaseFileController {
         const { url } = req;
 
         try {
-            await this.fileService.validatePath(url);
+            await this.fileService.validatePathWithPermissions(url);
         } catch (err) {
             throw err;
         }
