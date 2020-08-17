@@ -9,8 +9,4 @@ export class ImageController extends BaseFileController {
     constructor(protected readonly fileService: ImageService) {
         super();
     }
-
-    protected sayHii(): void {
-        console.log("byyye")
-    }
 }
