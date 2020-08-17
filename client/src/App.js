@@ -10,8 +10,11 @@ function App() {
   const [audioObj, setAudioObj] = useState(null);
   const [message, setMessage] = useState("");
 
+  const [uploadedImage, setUploadedImage] = useState("");
+  const [uploadedAudio, setUploadedAudio] = useState("");
+
   const send = async () => {
-    await filesUploader.fetch("/hello", {
+    const res = await filesUploader.fetch("/hello", {
       method: "POST",
       body: JSON.stringify({
         name: "michael",
@@ -20,6 +23,13 @@ function App() {
         audioId: audioObj.id
       })
     });
+
+    const data = await res.json();
+
+    setUploadedImage(data.image);
+    setUploadedAudio(data.audio);
+
+    alert("done")
   }
 
   const handleImageChange = e => {
@@ -55,6 +65,14 @@ function App() {
 
         <input type="text" value={message} onChange={e => setMessage(e.target.value)} />
 
+        {
+          uploadedAudio &&
+          <audio src={uploadedAudio} controls />
+        }
+        {
+          uploadedImage &&
+          <img src={uploadedImage} />
+        }
         <button onClick={send}>send</button>
       </header>
 
