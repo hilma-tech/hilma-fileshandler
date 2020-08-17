@@ -9,8 +9,11 @@ import * as randomstring from 'randomstring';
 
 export abstract class BaseFilesService {
     protected files: { extension: string, file: any }[];
-    protected fileType: string;
-    constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) private readonly options: FilesHandlerOptions) { }
+
+    constructor(
+        private readonly options: FilesHandlerOptions,
+        private readonly fileType: string
+    ) { }
 
     public setClientFiles(files: any[]): void {
         this.files = [];
@@ -26,20 +29,49 @@ export abstract class BaseFilesService {
         });
     }
 
-    public async saveFile(fileClientId: number) {
-        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === fileClientId.toString());
+    private async saveFile(buffer: Buffer, fileName: string, fileExtension: string) {
+        const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileExtension);
+        await fs.promises.writeFile(fileAbsolutePath, buffer);
+    }
+
+    public async save(clientFileId: number) {
+        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
 
         if (!fileAndExt) {
-            throw new Error(`FilesHandler: cannot save file ${fileClientId}, file doesn't exist`);
+            throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
         const fileName = await this.createUniqueFileName(fileAndExt.extension);
-        const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileAndExt.extension);
 
-        await fs.promises.writeFile(fileAbsolutePath, fileAndExt.file.buffer);
+        await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
 
         const filePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
         return filePath;
+    }
+
+    public async update(filePath: string, clientFileId: number): Promise<string> {
+        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
+
+        if (!fileAndExt) {
+            throw new Error(`FilesHandler: cannot update file ${filePath} to the file from the client with an id of ${clientFileId}`)
+        }
+
+        const fileName = this.getFileName(filePath);
+        await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
+
+        const newFilePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
+        return newFilePath;
+    }
+
+    private getFileName(url: string): string {
+        const [_, fileType, fileNameWithExtension] = url.split("/");
+        const fileName = fileNameWithExtension.split(".")[0];
+        return fileName;
+    }
+
+    public async delete(filePath: string): Promise<void> {
+        const fileAbsolutePath = path.join(this.options.folder, filePath);
+        await fs.promises.unlink(fileAbsolutePath);
     }
 
     /**
@@ -69,7 +101,7 @@ export abstract class BaseFilesService {
         throw new Error(`FilesHandler: cannot create a unique name for ${this.fileType}`);
     }
 
-    public async validatePath(url: string) {
+    public validatePath(url: string) {
         const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
         const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
 
@@ -78,6 +110,10 @@ export abstract class BaseFilesService {
         if (!url.match(regex)) {
             throw new BadRequestException();
         }
+    }
+
+    public async validatePathWithPermissions(url: string) {
+        this.validatePath(url);
 
         if (false) { /// records permissins
             throw new ForbiddenException();
