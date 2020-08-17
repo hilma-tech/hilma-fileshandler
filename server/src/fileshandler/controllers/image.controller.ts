@@ -4,9 +4,7 @@ import { ImageService } from '../services/image.service';
 
 @Controller("image")
 export class ImageController extends BaseFileController {
-    protected readonly fileType = "image";
-
-    constructor(protected readonly fileService: ImageService) {
-        super();
+    constructor(imageService: ImageService) {
+        super("image", imageService);
     }
 }

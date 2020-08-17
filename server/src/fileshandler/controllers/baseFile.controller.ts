@@ -4,8 +4,11 @@ import { BaseFilesService } from '../services/baseFile.service';
 import * as fs from 'fs';
 
 export abstract class BaseFileController {
-    protected readonly fileService: BaseFilesService;
-    protected readonly fileType: string;
+
+    constructor(
+        protected readonly fileType: string,
+        protected readonly fileService: BaseFilesService
+    ) { }
 
     @Get("*")
     async getFile(@Req() req: Request, @Res() res: Response) {
