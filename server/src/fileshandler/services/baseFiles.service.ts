@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -12,7 +12,7 @@ export abstract class BaseFilesService {
     protected fileType: string;
     constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) private readonly options: FilesHandlerOptions) { }
 
-    setClientFiles(files: any[]): void {
+    public setClientFiles(files: any[]): void {
         this.files = [];
         files.forEach(file => {
             for (let ext in MIME_TYPES[this.fileType]) {
@@ -26,7 +26,7 @@ export abstract class BaseFilesService {
         });
     }
 
-    async saveFile(fileClientId: number) {
+    public async saveFile(fileClientId: number) {
         const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === fileClientId.toString());
 
         if (!fileAndExt) {
@@ -67,5 +67,41 @@ export abstract class BaseFilesService {
         }
 
         throw new Error(`FilesHandler: cannot create a unique name for ${this.fileType}`);
+    }
+
+    public async validatePath(url: string) {
+        const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
+        const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
+
+        const regex = new RegExp(`^/${this.fileType}/[0-9a-zA-Z]{32}.(${mimeTypesWithParenthesis.join("|")})$`);
+
+        if (!url.match(regex)) {
+            throw new BadRequestException();
+        }
+
+        if (false) { /// records permissins
+            throw new ForbiddenException();
+        }
+    }
+
+    public getAbsolutePath(url: string): string {
+        return path.join(this.options.folder, url);
+    }
+
+    public getExtension(url: string): string {
+        const urlParts = url.split(".");
+        return urlParts[urlParts.length - 1];
+    }
+
+    public getMimeType(url: string): string {
+
+        const ext = this.getExtension(url);
+        const mimetype: string | string[] = MIME_TYPES[this.fileType][ext];
+
+        if (Array.isArray(mimetype)) {
+            return mimetype[0];
+        }
+
+        return mimetype;
     }
 }
