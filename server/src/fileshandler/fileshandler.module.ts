@@ -8,6 +8,8 @@ import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
 //controllers
 import { ImageController } from './controllers/image.controller';
 import { AudioController } from './controllers/audio.controller';
+import { FileController } from './controllers/file.controller';
+import { VidepController } from './controllers/video.controller';
 
 //services
 import { ImageService } from './services/image.service';
@@ -18,7 +20,9 @@ import { VideoService } from './services/video.service';
 @Module({
     controllers: [
         ImageController,
-        AudioController
+        AudioController,
+        FileController,
+        VidepController
     ],
     providers: [
         ImageService,
