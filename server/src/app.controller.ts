@@ -4,12 +4,14 @@ import { FilesHandler } from './fileshandler/filesHandler.decorator';
 
 import { ImageService } from './fileshandler/services/upload/image.service';
 import { AudioService } from './fileshandler/services/upload/audio.service';
+import { FileService } from './fileshandler/services/upload/file.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly imageService: ImageService,
-    private readonly audioService: AudioService
+    private readonly audioService: AudioService,
+    private readonly fileService: FileService
   ) { }
 
   @Post("/hello")
@@ -18,8 +20,8 @@ export class AppController {
     const imagePath = await this.imageService.save(body.imageId);
     const audioPath = await this.audioService.save(body.audioId);
 
-    await this.imageService.update("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png", body.imageId);
-    await this.imageService.delete("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png");
+    // await this.imageService.update("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png", body.imageId);
+    // await this.imageService.delete("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png");
     return {
       image: imagePath,
       audio: audioPath

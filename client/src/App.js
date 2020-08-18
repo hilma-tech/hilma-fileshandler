@@ -8,6 +8,7 @@ function App() {
 
   const [imageObj, setImageObj] = useState(null);
   const [audioObj, setAudioObj] = useState(null);
+  const [fileObj, setFileObj] = useState(null);
   const [message, setMessage] = useState("");
 
   const [uploadedImage, setUploadedImage] = useState("");
@@ -20,7 +21,8 @@ function App() {
         name: "michael",
         message,
         imageId: imageObj.id,
-        audioId: audioObj.id
+        audioId: audioObj.id,
+        fileId: fileObj.id
       })
     });
 
@@ -39,6 +41,10 @@ function App() {
   const handleAudioChange = e => {
     setAudioObj(e.target.value);
   };
+
+  const handleFileChange = e => {
+    setFileObj(e.target.value);
+  }
 
   return (
     <div className="App">
@@ -62,6 +68,9 @@ function App() {
             <audio src={audioObj.link} controls />
           </>
         }
+
+        file
+        <FileInput type="file" filesUploader={filesUploader} onChange={handleFileChange} />
 
         <input type="text" value={message} onChange={e => setMessage(e.target.value)} />
 
