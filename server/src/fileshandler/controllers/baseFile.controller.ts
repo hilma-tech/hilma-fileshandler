@@ -6,8 +6,8 @@ import { BaseServeFileService } from '../services/serve/baseServeFile.service';
 export abstract class BaseFileController {
 
     constructor(
-        protected readonly fileType: string,
-        protected readonly fileService: BaseServeFileService
+        protected readonly fileService: BaseServeFileService,
+        protected readonly fileType: string
     ) { }
 
     @Get("*")
