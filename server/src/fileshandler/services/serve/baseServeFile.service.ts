@@ -7,7 +7,7 @@ import { MIME_TYPES } from '../../consts';
 
 export class BaseServeFileService {
 
-    constructor(private readonly options: FilesHandlerOptions, private readonly fileType: string) { }
+    constructor(protected readonly options: FilesHandlerOptions, private readonly fileType: string) { }
 
     public validatePath(url: string) {
         const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
