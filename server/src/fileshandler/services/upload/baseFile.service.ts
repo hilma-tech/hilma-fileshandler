@@ -1,10 +1,9 @@
-import { Inject, BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { MIME_TYPES } from '../consts'
-import { FilesHandlerOptions } from '../interfaces/fIlesHandlerOptions.interface';
-import { FILESHANDLER_OPTIONS_SIGN } from '../consts';
+import { MIME_TYPES } from '../../consts'
+import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
 import * as randomstring from 'randomstring';
 
 export abstract class BaseFilesService {
@@ -101,43 +100,5 @@ export abstract class BaseFilesService {
         throw new Error(`FilesHandler: cannot create a unique name for ${this.fileType}`);
     }
 
-    public validatePath(url: string) {
-        const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
-        const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
-
-        const regex = new RegExp(`^/${this.fileType}/[0-9a-zA-Z]{32}.(${mimeTypesWithParenthesis.join("|")})$`);
-
-        if (!url.match(regex)) {
-            throw new BadRequestException();
-        }
-    }
-
-    public async validatePathWithPermissions(url: string) {
-        this.validatePath(url);
-
-        if (false) { /// records permissins
-            throw new ForbiddenException();
-        }
-    }
-
-    public getAbsolutePath(url: string): string {
-        return path.join(this.options.folder, url);
-    }
-
-    public getExtension(url: string): string {
-        const urlParts = url.split(".");
-        return urlParts[urlParts.length - 1];
-    }
-
-    public getMimeType(url: string): string {
-
-        const ext = this.getExtension(url);
-        const mimetype: string | string[] = MIME_TYPES[this.fileType][ext];
-
-        if (Array.isArray(mimetype)) {
-            return mimetype[0];
-        }
-
-        return mimetype;
-    }
+    
 }
