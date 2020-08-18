@@ -1,15 +1,16 @@
 import { Injectable, Scope, Inject } from '@nestjs/common';
+import * as path from 'path';
+import { imageSize } from 'image-size';
 import * as sharp from 'sharp';
-import {imageSize} from 'image-size';
+
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
-import { FILESHANDLER_OPTIONS_SIGN } from '../../consts';
-import { resolve } from 'path';
+import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../consts';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ImageService extends BaseFilesService {
     constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions) {
-        super(options, "image");
+        super(options, FILE_TYPES.IMAGE);
     }
 
     public async saveMultipleSizes(clientFileId: number): Promise<string[]> {
@@ -24,21 +25,24 @@ export class ImageService extends BaseFilesService {
         }
 
         const fileName = await this.createUniqueFileName(fileAndExt.extension);
-        console.log(fileAndExt.file)
-        // const possibleSize = Object.entries(this.options.imageSizes).filter(([sizeName, size]) => )
-        const promises = Object.entries(this.options.imageSizes).map(([sizeName, size]) => 
-            sharp(fileAndExt.file.buffer)
-        );
-        return [];
+
+        //try to find async option
+        const imageDimensions = imageSize(fileAndExt.file.buffer);
+        const imageWidth = imageDimensions.width;
+        
+        const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => width <= imageWidth);
+        
+        const savePromises = possibleSizes.map(([sizeName, width]) => {
+            const fileAbsolutePath = path.resolve(this.options.folder, "image", fileName + "." + sizeName + "." + fileAndExt.extension);
+            return sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
+        });
+        
+        await Promise.all(savePromises);
+
+        const filePaths = possibleSizes.map(([sizeName]) => `/image/${fileName}.${sizeName}.${fileAndExt.extension}`);
+        return filePaths;
     }
 
-    private imageSize(buffer: Buffer): Promise<any> {
-        // return new Promise((resolve, reject) => {
-        //     imageSize(buffer, (err, size) => {
-
-        //     })
-        // });
-    }
 
     private getExtensionsWithSizes(extension: string): string[] {
         const extensions = [extension];
