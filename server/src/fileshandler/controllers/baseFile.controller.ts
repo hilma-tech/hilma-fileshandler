@@ -1,13 +1,13 @@
 import { Get, Req, Res, NotFoundException } from '@nestjs/common';
-import { Request, Response } from 'express'
-import { BaseFilesService } from '../services/baseFile.service';
+import { Request, Response } from 'express';
 import * as fs from 'fs';
+import { BaseServeFileService } from '../services/serve/baseServeFile.service';
 
 export abstract class BaseFileController {
 
     constructor(
         protected readonly fileType: string,
-        protected readonly fileService: BaseFilesService
+        protected readonly fileService: BaseServeFileService
     ) { }
 
     @Get("*")

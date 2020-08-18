@@ -9,26 +9,36 @@ import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
 import { ImageController } from './controllers/image.controller';
 import { AudioController } from './controllers/audio.controller';
 import { FileController } from './controllers/file.controller';
-import { VidepController } from './controllers/video.controller';
+import { VideoController } from './controllers/video.controller';
 
-//services
-import { ImageService } from './services/image.service';
-import { AudioService } from './services/audio.service';
-import { FileService } from './services/file.service';
-import { VideoService } from './services/video.service';
+//upload services
+import { ImageService } from './services/upload/image.service';
+import { AudioService } from './services/upload/audio.service';
+import { FileService } from './services/upload/file.service';
+import { VideoService } from './services/upload/video.service';
+
+//serve services
+import { ServeImageService } from './services/serve/serveImage.service';
+import { ServeAudioService } from './services/serve/serveAudio.service';
+import { ServeFileService } from './services/serve/serveFile.service';
+import { ServeVideoService } from './services/serve/serveVideo.service';
 
 @Module({
     controllers: [
         ImageController,
         AudioController,
         FileController,
-        VidepController
+        VideoController
     ],
     providers: [
         ImageService,
         AudioService,
         FileService,
-        VideoService
+        VideoService,
+        ServeImageService,
+        ServeAudioService,
+        ServeFileService,
+        ServeVideoService
     ],
     exports: [
         ImageService,

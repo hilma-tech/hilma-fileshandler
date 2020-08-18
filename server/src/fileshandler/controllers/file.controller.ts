@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { BaseFileController } from './baseFile.controller';
-import { FileService } from '../services/file.service';
+import { ServeFileService } from '../services/serve/serveFile.service';
 
 @Controller("file")
 export class FileController extends BaseFileController {
-    constructor(fileService: FileService) {
+    constructor(fileService: ServeFileService) {
         super("file", fileService);
     }
 }

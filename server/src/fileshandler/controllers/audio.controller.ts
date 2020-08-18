@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { BaseFileController } from './baseFile.controller';
-import { AudioService } from '../services/audio.service';
+import { ServeAudioService } from '../services/serve/serveAudio.service';
 
 @Controller("audio")
 export class AudioController extends BaseFileController {
-    constructor(audioService: AudioService) {
+    constructor(audioService: ServeAudioService) {
         super("audio", audioService);
     }
 }
