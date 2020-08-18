@@ -1,4 +1,3 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -10,7 +9,7 @@ export abstract class BaseFilesService {
     protected files: { extension: string, file: any }[];
 
     constructor(
-        private readonly options: FilesHandlerOptions,
+        protected readonly options: FilesHandlerOptions,
         private readonly fileType: string
     ) { }
 
@@ -28,12 +27,12 @@ export abstract class BaseFilesService {
         });
     }
 
-    private async saveFile(buffer: Buffer, fileName: string, fileExtension: string) {
+    private async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
         const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileExtension);
         await fs.promises.writeFile(fileAbsolutePath, buffer);
     }
 
-    public async save(clientFileId: number) {
+    public async save(clientFileId: number): Promise<string> {
         const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
 
         if (!fileAndExt) {
@@ -48,19 +47,19 @@ export abstract class BaseFilesService {
         return filePath;
     }
 
-    public async update(filePath: string, clientFileId: number): Promise<string> {
-        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
+    // public async update(filePath: string, clientFileId: number): Promise<string> {
+    //     const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
 
-        if (!fileAndExt) {
-            throw new Error(`FilesHandler: cannot update file ${filePath} to the file from the client with an id of ${clientFileId}`)
-        }
+    //     if (!fileAndExt) {
+    //         throw new Error(`FilesHandler: cannot update file ${filePath} to the file from the client with an id of ${clientFileId}`)
+    //     }
 
-        const fileName = this.getFileName(filePath);
-        await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
+    //     const fileName = this.getFileName(filePath);
+    //     await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
 
-        const newFilePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
-        return newFilePath;
-    }
+    //     const newFilePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
+    //     return newFilePath;
+    // }
 
     private getFileName(url: string): string {
         const [_, fileType, fileNameWithExtension] = url.split("/");
@@ -84,15 +83,13 @@ export abstract class BaseFilesService {
      * we check if an error was thrown from fs.access
      */
 
-    private async createUniqueFileName(extension: string): Promise<string> {
+    protected async createUniqueFileName(extension: string): Promise<string> {
 
         for (let i = 0; i < 50; i++) {
             const name = randomstring.generate();
-            const filePath = path.resolve(this.options.folder, this.fileType, name + "." + extension);
 
-            try {
-                await fs.promises.access(filePath);
-            } catch (err) {
+            const nameExists = await this.fileExists(name, extension);
+            if (!nameExists) {
                 return name;
             }
         }
@@ -100,5 +97,13 @@ export abstract class BaseFilesService {
         throw new Error(`FilesHandler: cannot create a unique name for ${this.fileType}`);
     }
 
-    
+    protected async fileExists(name: string, extension: string): Promise<boolean> {
+        const filePath = path.resolve(this.options.folder, this.fileType, name + "." + extension);
+        try {
+            await fs.promises.access(filePath);
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
 }
