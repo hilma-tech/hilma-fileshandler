@@ -1,14 +1,13 @@
 import { Controller, Get, Body, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { AppService } from './app.service';
 import { FilesHandler } from './fileshandler/filesHandler.decorator';
-import { ImageService } from './fileshandler/services/image.service';
-import { AudioService } from './fileshandler/services/audio.service';
+
+import { ImageService } from './fileshandler/services/upload/image.service';
+import { AudioService } from './fileshandler/services/upload/audio.service';
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private readonly imageService: ImageService,
     private readonly audioService: AudioService
   ) { }
