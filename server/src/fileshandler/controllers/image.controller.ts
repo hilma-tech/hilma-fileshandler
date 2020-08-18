@@ -1,10 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { BaseFileController } from './baseFile.controller';
 import { ServeImageService } from '../services/serve/serveImage.service';
+import { FILE_TYPES } from '../consts';
 
-@Controller("image")
+@Controller(FILE_TYPES.IMAGE)
 export class ImageController extends BaseFileController {
     constructor(imageService: ServeImageService) {
-        super("image", imageService);
+        super(imageService, FILE_TYPES.IMAGE);
     }
 }

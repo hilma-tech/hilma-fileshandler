@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { BaseServeFileService } from './baseServeFile.service';
 import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
-import { FILESHANDLER_OPTIONS_SIGN } from '../../consts';
+import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../consts';
 
 @Injectable()
 export class ServeFileService extends BaseServeFileService {
     constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions) {
-        super(options, "file");
+        super(options, FILE_TYPES.FILE);
     }
 }

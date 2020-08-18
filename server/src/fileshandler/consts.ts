@@ -1,4 +1,9 @@
-export const FILE_TYPES = ["image", "audio", "file", "video"];
+export const FILE_TYPES = {
+    IMAGE: "image",
+    AUDIO: "audio",
+    FILE: "file",
+    VIDEO: "video"
+};
 
 export const MIME_TYPES = {
     image: {

@@ -64,7 +64,7 @@ export class FilesHandlerModule {
     }
 
     static createFolders(options: FilesHandlerOptions): void {
-        FILE_TYPES.forEach(fileType => {
+        Object.values(FILE_TYPES).forEach(fileType => {
             const folderPath = path.resolve(options.folder, fileType);
             fs.mkdirSync(folderPath, { recursive: true });
         });
