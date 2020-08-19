@@ -9,10 +9,12 @@ function App() {
   const [imageObj, setImageObj] = useState(null);
   const [audioObj, setAudioObj] = useState(null);
   const [fileObj, setFileObj] = useState(null);
+  const [videoObj, setVideoObj] = useState(null);
   const [message, setMessage] = useState("");
 
   const [uploadedImage, setUploadedImage] = useState("");
   const [uploadedAudio, setUploadedAudio] = useState("");
+  const [uploadedVideo, setUploadedVideo] = useState("");
 
   const send = async () => {
     const res = await filesUploader.fetch("/hello", {
@@ -20,8 +22,8 @@ function App() {
       body: JSON.stringify({
         name: "michael",
         message,
-        imageId: imageObj.id,
-        audioId: audioObj.id,
+        // imageId: imageObj.id,
+        // audioId: audioObj.id,
         // fileId: fileObj.id
       })
     });
@@ -30,7 +32,7 @@ function App() {
 
     setUploadedImage(data.image);
     setUploadedAudio(data.audio);
-
+    setUploadedVideo(data.video)
     alert("done")
   }
 
@@ -44,6 +46,10 @@ function App() {
 
   const handleFileChange = e => {
     setFileObj(e.target.value);
+  }
+
+  const handleVideoChange = e => {
+    setVideoObj(e.target.value);
   }
 
   return (
@@ -72,6 +78,12 @@ function App() {
         file
         <FileInput type="file" filesUploader={filesUploader} onChange={handleFileChange} />
 
+        video
+        <FileInput type="video" filesUploader={filesUploader} onChange={handleVideoChange} />
+        {
+          videoObj &&
+          <video src={videoObj.link} controls />
+        }
         <input type="text" value={message} onChange={e => setMessage(e.target.value)} />
 
         {
@@ -81,6 +93,11 @@ function App() {
         {
           uploadedImage &&
           <img src={uploadedImage} />
+        }
+
+        {
+          uploadedVideo &&
+          <video src={uploadedVideo} controls />
         }
         <button onClick={send}>send</button>
       </header>
