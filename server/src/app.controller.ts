@@ -21,11 +21,12 @@ export class AppController {
   async getHello(@Body() body: any): Promise<any> {
     // const imagePath = await this.imageService.saveSingleFileInMultipleSizes();
     // const audioPath = await this.audioService.save(body.audioId);
-    const videoPath = await this.videoService.saveSingleFile()
+    // const videoPath = await this.videoService.saveSingleFile();
+    const filePath = await this.fileService.saveSingleFile();
     return {
       // image: imagePath[1],
       // audio: audioPath,
-      video: videoPath
+      // video: videoPath
     };
   }
 
