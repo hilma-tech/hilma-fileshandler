@@ -9,12 +9,11 @@ export class BaseServeFileService {
 
     constructor(protected readonly options: FilesHandlerOptions, private readonly fileType: string) { }
 
-    public validatePath(url: string) {
+    public validatePath(url: string): void {
         const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
         const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
 
-        const regex = new RegExp(`^/${this.fileType}/[0-9a-zA-Z]{32}.(${mimeTypesWithParenthesis.join("|")})$`);
-
+        const regex = new RegExp(`^/${this.fileType}/[0-9a-zA-Z]{32}\\.(${mimeTypesWithParenthesis.join("|")})$`);
         if (!url.match(regex)) {
             throw new BadRequestException();
         }
