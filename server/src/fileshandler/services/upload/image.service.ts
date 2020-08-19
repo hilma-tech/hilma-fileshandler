@@ -14,6 +14,29 @@ export class ImageService extends BaseFilesService {
         super(options, FILE_TYPES.IMAGE);
     }
 
+    async saveInSize(clientFileId: number, width: number): Promise<string> {
+        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
+
+        if (!fileAndExt) {
+            throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
+        }
+
+        const fileName = await this.createUniqueFileName(fileAndExt.extension);
+        const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, `${fileName}.${fileAndExt.extension}`);
+        const filePath = `/${FILE_TYPES.IMAGE}/${fileName}.${fileAndExt.extension}`;
+
+        const imageDimensions = imageSize(fileAndExt.file.buffer);
+        const imageWidth = imageDimensions.width;
+
+        if (width >= imageWidth) {
+            await fs.promises.writeFile(fileAbsolutePath, fileAndExt.file.buffer);
+        } else {
+            await sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
+        }
+
+        return filePath;
+    }
+
     public async saveMultipleSizes(clientFileId: number): Promise<string[]> {
         if (!this.options.imageSizes) {
             throw new Error("In order to use multiple sizes you must insert the sizes to FilesHandlerModule.register");
@@ -100,9 +123,7 @@ export class ImageService extends BaseFilesService {
     }
 
     protected async fileExists(name: string, extension: string): Promise<boolean> {
-
         const extensions = this.getExtensionsWithSizes(extension);
-
         const existsPromises = extensions.map(ext => super.fileExists(name, ext));
         const existsBySize = await Promise.all(existsPromises);
         const exists = existsBySize.some(sizeExists => sizeExists);
