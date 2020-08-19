@@ -1,5 +1,6 @@
 import { Injectable, Scope, Inject } from '@nestjs/common';
 import * as path from 'path';
+import * as fs from 'fs';
 import { imageSize } from 'image-size';
 import * as sharp from 'sharp';
 
@@ -48,6 +49,29 @@ export class ImageService extends BaseFilesService {
         await this.saveFile(fileAndExt.file.buffer, fileName, `${smallestSizeName}.${fileAndExt.extension}`);
 
         return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${fileAndExt.extension}`];
+    }
+
+    public async deleteMultipleSizes(imagePath: string): Promise<void> {
+        const imagePathParts = imagePath.split("/");
+        const imageNameAndExt = imagePathParts[2];
+        const imageNameAndExtParts = imageNameAndExt.split(".");
+
+        const imageName = imageNameAndExtParts[0];
+        const imageExt = imageNameAndExtParts[imageNameAndExtParts.length - 1];
+
+        const sizeNames = Object.keys(this.options.imageSizes);
+
+        const deletePromises = sizeNames.map(sizeName =>
+            super.fileExists(imageName, `${sizeName}.${imageExt}`)
+                .then(exists => {
+                    if (exists) {
+                        const imageSizePath = path.join(this.options.folder, FILE_TYPES.IMAGE, `${imageName}.${sizeName}.${imageExt}`);
+                        return fs.promises.unlink(imageSizePath);
+                    }
+                })
+        );
+
+        await Promise.all(deletePromises);
     }
 
     private getSmallestSizeName(): string {
