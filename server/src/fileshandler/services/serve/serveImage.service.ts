@@ -15,7 +15,7 @@ export class ServeImageService extends BaseServeFileService {
         const sizeNames = Object.keys(this.options.imageSizes);
         const sizeNamesWithParenthesis = sizeNames.map(sizeName => `(${sizeName})`);
 
-        const regex = new RegExp(`^/${FILE_TYPES.IMAGE}/[0-9a-zA-Z]{32}(\.(${sizeNamesWithParenthesis.join("|")}))?\.(${mimeTypesWithParenthesis.join("|")})$`);
+        const regex = new RegExp(`^/${FILE_TYPES.IMAGE}/[0-9a-zA-Z]{32}(\\.(${sizeNamesWithParenthesis.join("|")}))?\\.(${mimeTypesWithParenthesis.join("|")})$`);
 
         if (!url.match(regex)) {
             throw new BadRequestException();
