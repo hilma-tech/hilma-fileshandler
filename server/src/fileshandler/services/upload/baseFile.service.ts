@@ -47,6 +47,15 @@ export abstract class BaseFilesService {
         return filePath;
     }
 
+    public saveSingleFile(): Promise<string> {
+        if (!this.files[0]) {
+            throw new Error(`FilesHandler: cannot save a single file, file doesn't exist`);
+        }
+
+        const clientFileId = parseInt(this.files[0].file.originalname);
+        return this.save(clientFileId);
+    }
+
     // public async update(filePath: string, clientFileId: number): Promise<string> {
     //     const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
 
@@ -61,11 +70,11 @@ export abstract class BaseFilesService {
     //     return newFilePath;
     // }
 
-    private getFileName(url: string): string {
-        const [_, fileType, fileNameWithExtension] = url.split("/");
-        const fileName = fileNameWithExtension.split(".")[0];
-        return fileName;
-    }
+    // private getFileName(url: string): string {
+    //     const [_, fileType, fileNameWithExtension] = url.split("/");
+    //     const fileName = fileNameWithExtension.split(".")[0];
+    //     return fileName;
+    // }
 
     public async delete(filePath: string): Promise<void> {
         const fileAbsolutePath = path.join(this.options.folder, filePath);

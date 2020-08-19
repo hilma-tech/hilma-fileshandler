@@ -37,6 +37,15 @@ export class ImageService extends BaseFilesService {
         return filePath;
     }
 
+    public saveSingleFileInSize(width: number): Promise<string> {
+        if (!this.files[0]) {
+            throw new Error(`FilesHandler: cannot save a single image in size, image doesn't exist`);
+        }
+
+        const clientFileId = parseInt(this.files[0].file.originalname);
+        return this.saveInSize(clientFileId, width);
+    }
+
     public async saveMultipleSizes(clientFileId: number): Promise<string[]> {
         if (!this.options.imageSizes) {
             throw new Error("In order to use multiple sizes you must insert the sizes to FilesHandlerModule.register");
@@ -72,6 +81,15 @@ export class ImageService extends BaseFilesService {
         await this.saveFile(fileAndExt.file.buffer, fileName, `${smallestSizeName}.${fileAndExt.extension}`);
 
         return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${fileAndExt.extension}`];
+    }
+
+    public saveSingleFileInMultipleSizes(): Promise<string[]> {
+        if (!this.files[0]) {
+            throw new Error(`FilesHandler: cannot save a single image in size, image doesn't exist`);
+        }
+
+        const clientFileId = parseInt(this.files[0].file.originalname);
+        return this.saveMultipleSizes(clientFileId);
     }
 
     public async deleteMultipleSizes(imagePath: string): Promise<void> {
