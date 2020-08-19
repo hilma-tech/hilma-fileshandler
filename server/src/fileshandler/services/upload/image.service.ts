@@ -29,18 +29,38 @@ export class ImageService extends BaseFilesService {
         //try to find async option
         const imageDimensions = imageSize(fileAndExt.file.buffer);
         const imageWidth = imageDimensions.width;
-        
-        const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => width <= imageWidth);
-        
-        const savePromises = possibleSizes.map(([sizeName, width]) => {
-            const fileAbsolutePath = path.resolve(this.options.folder, "image", fileName + "." + sizeName + "." + fileAndExt.extension);
-            return sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
-        });
-        
-        await Promise.all(savePromises);
 
-        const filePaths = possibleSizes.map(([sizeName]) => `/image/${fileName}.${sizeName}.${fileAndExt.extension}`);
-        return filePaths;
+        const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => width <= imageWidth);
+
+        if (possibleSizes.length > 0) {
+            const savePromises = possibleSizes.map(([sizeName, width]) => {
+                const fileAbsolutePath = path.resolve(this.options.folder, "image", fileName + "." + sizeName + "." + fileAndExt.extension);
+                return sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
+            });
+
+            await Promise.all(savePromises);
+
+            const filePaths = possibleSizes.map(([sizeName]) => `/${FILE_TYPES.IMAGE}/${fileName}.${sizeName}.${fileAndExt.extension}`);
+            return filePaths;
+        }
+
+        const smallestSizeName = this.getSmallestSizeName();
+        await this.saveFile(fileAndExt.file.buffer, fileName, `${smallestSizeName}.${fileAndExt.extension}`);
+
+        return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${fileAndExt.extension}`];
+    }
+
+    private getSmallestSizeName(): string {
+        const sizeNames = Object.keys(this.options.imageSizes);
+        let smallestSizeName = sizeNames[0];
+
+        sizeNames.forEach(sizeName => {
+            if (this.options.imageSizes[sizeName] < this.options.imageSizes[smallestSizeName]) {
+                smallestSizeName = sizeName;
+            }
+        });
+
+        return smallestSizeName;
     }
 
 

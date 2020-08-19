@@ -27,7 +27,7 @@ export abstract class BaseFilesService {
         });
     }
 
-    private async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
+    protected async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
         const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileExtension);
         await fs.promises.writeFile(fileAbsolutePath, buffer);
     }
