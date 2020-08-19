@@ -16,15 +16,13 @@ export class AppController {
 
   @Post("/hello")
   @FilesHandler()
-  async getHello(@Body() body: any): Promise<{ image: string, audio: string }> {
-    const imagePath = await this.imageService.save(body.imageId);
-    const audioPath = await this.audioService.save(body.audioId);
+  async getHello(@Body() body: any): Promise<{ image?: string, audio?: string }> {
+    const imagePath = await this.imageService.saveSingleFileInMultipleSizes();
+    // const audioPath = await this.audioService.save(body.audioId);
 
-    // await this.imageService.update("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png", body.imageId);
-    // await this.imageService.delete("/image/ZQsixpEncf3cCryT8cDV21dT14cFJ02O.png");
     return {
-      image: imagePath,
-      audio: audioPath
+      image: imagePath[1],
+      // audio: audioPath
     };
   }
 
