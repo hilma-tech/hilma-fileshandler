@@ -28,7 +28,7 @@ export abstract class BaseFilesService {
     }
 
     protected async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
-        const fileAbsolutePath = path.resolve(this.options.folder, this.fileType, fileName + "." + fileExtension);
+        const fileAbsolutePath = path.join(this.options.folder, this.fileType, fileName + "." + fileExtension);
         await fs.promises.writeFile(fileAbsolutePath, buffer);
     }
 
@@ -107,7 +107,7 @@ export abstract class BaseFilesService {
     }
 
     protected async fileExists(name: string, extension: string): Promise<boolean> {
-        const filePath = path.resolve(this.options.folder, this.fileType, name + "." + extension);
+        const filePath = path.join(this.options.folder, this.fileType, name + "." + extension);
         try {
             await fs.promises.access(filePath);
             return true;

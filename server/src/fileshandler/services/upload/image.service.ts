@@ -67,7 +67,7 @@ export class ImageService extends BaseFilesService {
 
         if (possibleSizes.length > 0) {
             const savePromises = possibleSizes.map(([sizeName, width]) => {
-                const fileAbsolutePath = path.resolve(this.options.folder, "image", fileName + "." + sizeName + "." + fileAndExt.extension);
+                const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, fileName + "." + sizeName + "." + fileAndExt.extension);
                 return sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
             });
 
