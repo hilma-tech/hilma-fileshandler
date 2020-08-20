@@ -19,20 +19,17 @@ export class AppController {
   @Post("/hello")
   @FilesHandler()
   async getHello(@Body() body: any): Promise<any> {
-    // const imagePath = await this.imageService.saveSingleFileInMultipleSizes();
-    // const audioPath = await this.audioService.save(body.audioId);
+    const imagePath = await this.imageService.save(body.imageId);
+    const audioPath = await this.audioService.save(body.audioId);
     // const videoPath = await this.videoService.saveSingleFile();
-    const filePath = await this.fileService.saveSingleFile();
+  
+    // const filePath = await this.fileService.saveSingleFile();
     return {
-      // image: imagePath[1],
-      // audio: audioPath,
+      image: imagePath,
+      audio: audioPath,
       // video: videoPath
     };
   }
 
 
-  @Get("file")
-  getFile(@Res() res: Response): void {
-    res.sendFile("/home/michael/filesHanxdlerUploads/first/image/2ovZRXhd8WKJFi2lxiJ62nstYZOOIqo2.png")
-  }
 }

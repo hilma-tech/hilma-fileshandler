@@ -22,8 +22,8 @@ function App() {
       body: JSON.stringify({
         name: "michael",
         message,
-        // imageId: imageObj.id,
-        // audioId: audioObj.id,
+        imageId: imageObj.id,
+        audioId: audioObj.id,
         // fileId: fileObj.id
       })
     });
