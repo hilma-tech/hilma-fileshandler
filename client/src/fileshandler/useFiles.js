@@ -1,11 +1,15 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import FilesUploader from './FilesUploader';
 
 function useFiles() {
-    const filesUplader = useMemo(() => new FilesUploader(), []);
+    const [filesUplader, setFilesUploader] = useState(null);
 
     useEffect(() => {
-        return filesUplader.deleteAll();
+        setFilesUploader(new FilesUploader());
+        
+        return () => {
+            filesUplader.deleteAll();
+        };
     }, []);
 
     return filesUplader;

@@ -44,7 +44,10 @@ function FileInput(props) {
 
 FileInput.propTypes = {
     type: PropTypes.oneOf(TYPES).isRequired,
-    filesUploader: PropTypes.instanceOf(FilesUploader).isRequired,
+    filesUploader: PropTypes.oneOfType([
+        PropTypes.instanceOf(FilesUploader).isRequired,
+        PropTypes.object
+    ]),
     onChange: PropTypes.func.isRequired,
     singleUpload: PropTypes.bool
 };
