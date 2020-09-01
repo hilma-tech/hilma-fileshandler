@@ -4,16 +4,15 @@ import * as path from 'path';
 import { MIME_TYPES } from '../../consts'
 import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
 import * as randomstring from 'randomstring';
-
 export abstract class BaseFilesService {
-    protected files: { extension: string, file: any }[];
+    protected files: { extension: string, file: globalThis.Express.Multer.File }[];
 
     constructor(
         protected readonly options: FilesHandlerOptions,
-        private readonly fileType: string
+        private readonly fileType: string,
     ) { }
 
-    public setClientFiles(files: any[]): void {
+    public setClientFiles(files: globalThis.Express.Multer.File[]): void {
         this.files = [];
         files.forEach(file => {
             for (let ext in MIME_TYPES[this.fileType]) {
