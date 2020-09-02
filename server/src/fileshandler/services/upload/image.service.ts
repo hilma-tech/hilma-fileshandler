@@ -8,88 +8,101 @@ import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../consts';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ImageService extends BaseFilesService {
     constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions) {
         super(options, FILE_TYPES.IMAGE);
     }
 
-    async saveInSize(clientFileId: number, width: number): Promise<string> {
-        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
+    async saveInSize(files: globalThis.Express.Multer.File[], clientFileId: number, width: number): Promise<string> {
+        const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
 
-        if (!fileAndExt) {
+        if (!file) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const fileName = await this.createUniqueFileName(fileAndExt.extension);
-        const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, `${fileName}.${fileAndExt.extension}`);
-        const filePath = `/${FILE_TYPES.IMAGE}/${fileName}.${fileAndExt.extension}`;
+        const extension = this.findExtension(file.mimetype);
 
-        const imageDimensions = imageSize(fileAndExt.file.buffer);
+        if (!extension) {
+            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
+        }
+
+        const fileName = await this.createUniqueFileName(extension);
+        const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, `${fileName}.${extension}`);
+        const filePath = `/${FILE_TYPES.IMAGE}/${fileName}.${extension}`;
+
+        const imageDimensions = imageSize(file.buffer);
         const imageWidth = imageDimensions.width;
 
         if (width >= imageWidth) {
-            await fs.promises.writeFile(fileAbsolutePath, fileAndExt.file.buffer);
+            await fs.promises.writeFile(fileAbsolutePath, file.buffer);
         } else {
-            await sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
+            await sharp(file.buffer).resize(width).toFile(fileAbsolutePath);
         }
 
         return filePath;
     }
 
-    public saveSingleFileInSize(width: number): Promise<string> {
-        if (!this.files[0]) {
+    public saveSingleFileInSize(files: globalThis.Express.Multer.File[], width: number): Promise<string> {
+        const file = this.findFirstFileInType(files);
+        if (!file) {
             throw new Error(`FilesHandler: cannot save a single image in size, image doesn't exist`);
         }
 
-        const clientFileId = parseInt(this.files[0].file.originalname);
-        return this.saveInSize(clientFileId, width);
+        const clientFileId = parseInt(file.originalname);
+        return this.saveInSize(files, clientFileId, width);
     }
 
-    public async saveMultipleSizes(clientFileId: number): Promise<string[]> {
+    public async saveMultipleSizes(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string[]> {
         if (!this.options.imageSizes) {
             throw new Error("In order to use multiple sizes you must insert the sizes to FilesHandlerModule.register");
         }
 
-        const fileAndExt = this.files.find(file => file.file.originalname === clientFileId.toString());
+        const file = files.find(file => file.originalname === clientFileId.toString());
 
-        if (!fileAndExt) {
+        if (!file) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const fileName = await this.createUniqueFileName(fileAndExt.extension);
+        const extension = this.findExtension(file.mimetype);
+        if (!extension) {
+            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
+        }
+
+        const fileName = await this.createUniqueFileName(extension);
 
         //try to find async option
-        const imageDimensions = imageSize(fileAndExt.file.buffer);
+        const imageDimensions = imageSize(file.buffer);
         const imageWidth = imageDimensions.width;
 
-        const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => width <= imageWidth);
+        const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => imageWidth >= width);
 
         if (possibleSizes.length > 0) {
             const savePromises = possibleSizes.map(([sizeName, width]) => {
-                const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, fileName + "." + sizeName + "." + fileAndExt.extension);
-                return sharp(fileAndExt.file.buffer).resize(width).toFile(fileAbsolutePath);
+                const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, fileName + "." + sizeName + "." + extension);
+                return sharp(file.buffer).resize(width).toFile(fileAbsolutePath);
             });
 
             await Promise.all(savePromises);
 
-            const filePaths = possibleSizes.map(([sizeName]) => `/${FILE_TYPES.IMAGE}/${fileName}.${sizeName}.${fileAndExt.extension}`);
+            const filePaths = possibleSizes.map(([sizeName]) => `/${FILE_TYPES.IMAGE}/${fileName}.${sizeName}.${extension}`);
             return filePaths;
         }
 
         const smallestSizeName = this.getSmallestSizeName();
-        await this.saveFile(fileAndExt.file.buffer, fileName, `${smallestSizeName}.${fileAndExt.extension}`);
+        await this.saveFile(file.buffer, fileName, `${smallestSizeName}.${extension}`);
 
-        return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${fileAndExt.extension}`];
+        return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${extension}`];
     }
 
-    public saveSingleFileInMultipleSizes(): Promise<string[]> {
-        if (!this.files[0]) {
+    public saveSingleFileInMultipleSizes(files: globalThis.Express.Multer.File[]): Promise<string[]> {
+        const file = this.findFirstFileInType(files);
+        if (!file) {
             throw new Error(`FilesHandler: cannot save a single image in size, image doesn't exist`);
         }
-
-        const clientFileId = parseInt(this.files[0].file.originalname);
-        return this.saveMultipleSizes(clientFileId);
+        
+        const clientFileId = parseInt(file.originalname);
+        return this.saveMultipleSizes(files, clientFileId);
     }
 
     public async deleteMultipleSizes(imagePath: string): Promise<void> {

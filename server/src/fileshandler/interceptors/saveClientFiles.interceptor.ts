@@ -22,10 +22,10 @@ export class SaveClientFilesInterceptor implements NestInterceptor {
         const ctx = context.switchToHttp();
         const req = ctx.getRequest<Request>();
 
-        this.imageService.setClientFiles(req.files as any[]);
-        this.audioService.setClientFiles(req.files as any[]);
-        this.fileService.setClientFiles(req.files as any[]);
-        this.videoService.setClientFiles(req.files as any[]);
+        // this.imageService.setClientFiles(req.files as any[]);
+        // this.audioService.setClientFiles(req.files as any[]);
+        // this.fileService.setClientFiles(req.files as any[]);
+        // this.videoService.setClientFiles(req.files as any[]);
 
         return next.handle();
     }

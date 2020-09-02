@@ -8,7 +8,7 @@ export function FilesHandler() {
         UseInterceptors(
             FilesInterceptor("FilesHandler"),
             GetBodyInterceptor,
-            SaveClientFilesInterceptor
+            // SaveClientFilesInterceptor
         )
     );
 }

@@ -5,75 +5,75 @@ import { MIME_TYPES } from '../../consts'
 import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
 import * as randomstring from 'randomstring';
 export abstract class BaseFilesService {
-    protected files: { extension: string, file: globalThis.Express.Multer.File }[];
+    // protected files: { extension: string, file: globalThis.Express.Multer.File }[];
 
     constructor(
         protected readonly options: FilesHandlerOptions,
         private readonly fileType: string,
     ) { }
 
-    public setClientFiles(files: globalThis.Express.Multer.File[]): void {
-        this.files = [];
-        files.forEach(file => {
-            for (let ext in MIME_TYPES[this.fileType]) {
-                if (MIME_TYPES[this.fileType][ext] === file.mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(file.mimetype)) {
-                    this.files.push({
-                        extension: ext,
-                        file
-                    });
-                }
-            }
-        });
-    }
+    // public setClientFiles(files: globalThis.Express.Multer.File[]): void {
+    //     this.files = [];
+    //     files.forEach(file => {
+    //         for (let ext in MIME_TYPES[this.fileType]) {
+    //             if (MIME_TYPES[this.fileType][ext] === file.mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(file.mimetype)) {
+    //                 this.files.push({
+    //                     extension: ext,
+    //                     file
+    //                 });
+    //             }
+    //         }
+    //     });
+    // }
 
     protected async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
         const fileAbsolutePath = path.join(this.options.folder, this.fileType, fileName + "." + fileExtension);
         await fs.promises.writeFile(fileAbsolutePath, buffer);
     }
 
-    public async save(clientFileId: number): Promise<string> {
-        const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
+    protected findExtension(mimetype: string): string {
+        for (let ext in MIME_TYPES[this.fileType]) {
+            if (MIME_TYPES[this.fileType][ext] === mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(mimetype)) {
+                return ext;
+            }
+        }
 
-        if (!fileAndExt) {
+        return null;
+    }
+
+    public async save(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string> {
+        const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
+
+        if (!file) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const fileName = await this.createUniqueFileName(fileAndExt.extension);
+        const extension = this.findExtension(file.mimetype);
+        if (!extension) {
+            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${this.fileType}.`);
+        }
+        
+        const fileName = await this.createUniqueFileName(extension);
 
-        await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
+        await this.saveFile(file.buffer, fileName, extension);
 
-        const filePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
+        const filePath = `/${this.fileType}/${fileName}.${extension}`;
         return filePath;
     }
 
-    public saveSingleFile(): Promise<string> {
-        if (!this.files[0]) {
+    protected findFirstFileInType(files: globalThis.Express.Multer.File[]): globalThis.Express.Multer.File {
+        return files.find(file => this.findExtension(file.mimetype));
+    }
+
+    public saveSingleFile(files: globalThis.Express.Multer.File[]): Promise<string> {
+        const file = this.findFirstFileInType(files);
+        if (!file) {
             throw new Error(`FilesHandler: cannot save a single file, file doesn't exist`);
         }
 
-        const clientFileId = parseInt(this.files[0].file.originalname);
-        return this.save(clientFileId);
+        const clientFileId = parseInt(file.originalname);
+        return this.save(files, clientFileId);
     }
-
-    // public async update(filePath: string, clientFileId: number): Promise<string> {
-    //     const fileAndExt = this.files.find(fileAndExt => fileAndExt.file.originalname === clientFileId.toString());
-
-    //     if (!fileAndExt) {
-    //         throw new Error(`FilesHandler: cannot update file ${filePath} to the file from the client with an id of ${clientFileId}`)
-    //     }
-
-    //     const fileName = this.getFileName(filePath);
-    //     await this.saveFile(fileAndExt.file.buffer, fileName, fileAndExt.extension);
-
-    //     const newFilePath = `/${this.fileType}/${fileName}.${fileAndExt.extension}`;
-    //     return newFilePath;
-    // }
-
-    // private getFileName(url: string): string {
-    //     const [_, fileType, fileNameWithExtension] = url.split("/");
-    //     const fileName = fileNameWithExtension.split(".")[0];
-    //     return fileName;
-    // }
 
     public async delete(filePath: string): Promise<void> {
         const fileAbsolutePath = path.join(this.options.folder, filePath);
