@@ -5,7 +5,11 @@ export const FILE_TYPES = {
     VIDEO: "video"
 };
 
-export const MIME_TYPES = {
+export const MIME_TYPES: {
+    [fileType: string]: {
+        [extension: string]: string | string[]
+    }
+} = {
     image: {
         jpg: "image/jpeg",
         png: "image/png",
