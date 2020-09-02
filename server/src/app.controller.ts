@@ -1,5 +1,4 @@
-import { Controller, Get, Body, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Controller, Body, Post, UploadedFiles } from '@nestjs/common';
 import { FilesHandler } from './fileshandler/filesHandler.decorator';
 
 import { ImageService } from './fileshandler/services/upload/image.service';
@@ -18,16 +17,20 @@ export class AppController {
 
   @Post("/hello")
   @FilesHandler()
-  async getHello(@Body() body: any): Promise<any> {
-    const imagePath = await this.imageService.save(body.imageId);
-    const audioPath = await this.audioService.save(body.audioId);
-    // const videoPath = await this.videoService.saveSingleFile();
-  
-    // const filePath = await this.fileService.saveSingleFile();
+  async getHello(@Body() body: any, @UploadedFiles() files: globalThis.Express.Multer.File[]): Promise<any> {
+
+    const imagePath = await this.imageService.save(files, body.imageId);
+    const audioPath = await this.audioService.save(files, body.audioId);
+    const videoPath = await this.videoService.saveSingleFile(files);
+
+    const filePath = await this.fileService.saveSingleFile(files);
+    const multipleImage = await this.imageService.saveSingleFileInMultipleSizes(files);
+    console.log(multipleImage)
+    console.log(filePath)
     return {
       image: imagePath,
       audio: audioPath,
-      // video: videoPath
+      video: videoPath
     };
   }
 

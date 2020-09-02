@@ -24,7 +24,7 @@ function App() {
         message,
         imageId: imageObj.id,
         audioId: audioObj.id,
-        // fileId: fileObj.id
+        fileId: fileObj.id
       })
     });
 
