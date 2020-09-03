@@ -1,0 +1,14 @@
+{
+    "SIMPLEUSER": {
+        "components": [
+            "Lobby"
+        ],
+        "defaultHomePage": "Lobby"
+    },
+    "admin": {
+        "components": [
+            "Lobby"
+        ],
+        "defaultHomePage": "Lobby"
+    }
+}

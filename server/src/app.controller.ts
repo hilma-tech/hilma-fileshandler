@@ -1,10 +1,13 @@
-import { Controller, Body, Post, UploadedFiles } from '@nestjs/common';
+import { Controller, Body, Post, UploadedFiles, Res, Req } from '@nestjs/common';
+import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAuth, Roles } from "@hilma/auth-nest";
+
 import { FilesHandler } from './fileshandler/filesHandler.decorator';
 
 import { ImageService } from './fileshandler/services/upload/image.service';
 import { AudioService } from './fileshandler/services/upload/audio.service';
 import { FileService } from './fileshandler/services/upload/file.service';
 import { VideoService } from './fileshandler/services/upload/video.service';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -12,7 +15,8 @@ export class AppController {
     private readonly imageService: ImageService,
     private readonly audioService: AudioService,
     private readonly fileService: FileService,
-    private readonly videoService: VideoService
+    private readonly videoService: VideoService,
+    private readonly userService: UserService
   ) { }
 
   @Post("/hello")
@@ -34,5 +38,29 @@ export class AppController {
     };
   }
 
+  @Post("/signUp")
+  async signUp(@Body() body: { username: string, password: string }): Promise<void> {
+    console.log(body)
+    console.log("sign up")
+    const userForDB = new User();
+    userForDB.username = body.username;
+    userForDB.password = body.password;
+    userForDB.roles = [{ id: 1, name: "admin", description: "admin" }];
+    const user = await this.userService.createUser(userForDB);
+  }
 
+  @UseLocalAuth()
+  @Post("/login")
+  login(@RequestUser() user: RequestUserType, @Res() res: Response): void {
+    const body = this.userService.login(user, res);
+    res.send(body);
+  }
+
+
+  @UseJwtAuth()
+  @Post("/info")
+  getInfo(@RequestUser() user: User, @Req() req) {
+    console.log("hello")
+    console.log(user)
+  }
 }

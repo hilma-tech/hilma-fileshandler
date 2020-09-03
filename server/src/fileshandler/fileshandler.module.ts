@@ -5,6 +5,9 @@ import * as path from 'path';
 import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
 
+// import { UserModule } from '@hilma/auth-nest';
+import {UserModule} from '@hilma/auth-nest'
+
 //controllers
 import { ImageController } from './controllers/image.controller';
 import { AudioController } from './controllers/audio.controller';
@@ -24,6 +27,9 @@ import { ServeFileService } from './services/serve/serveFile.service';
 import { ServeVideoService } from './services/serve/serveVideo.service';
 
 @Module({
+    imports: [
+        UserModule
+    ],
     controllers: [
         ImageController,
         AudioController,

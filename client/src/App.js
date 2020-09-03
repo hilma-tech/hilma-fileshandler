@@ -32,9 +32,49 @@ function App() {
 
     setUploadedImage(data.image);
     setUploadedAudio(data.audio);
-    setUploadedVideo(data.video)
-    alert("done")
+    setUploadedVideo(data.video);
+    alert("done");
   }
+
+  const signUp = async () => {
+    await fetch("/signUp", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        username: "michael",
+        password: "Qw12345"
+      })
+    });
+  }
+
+  const login = async () => {
+    await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        username: "michael",
+        password: "Qw12345"
+      })
+    });
+  }
+
+  const getInfo = async () => {
+    console.log("here")
+    await fetch("/info", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmMGNlMjI4LTIyNTctNDE1ZC1hM2ZkLTMxYjFhOWFjY2Q0MiIsInVzZXJuYW1lIjoibWljaGFlbCIsInR5cGUiOiJVc2VyIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNTk5MTE4OTQ3LCJleHAiOjE1OTkxMjQ5NDd9.KQBB69eKDBBuEJeLBZe8zgN486MP5lnH58ow1kkGUCY`
+      },
+      body: JSON.stringify({
+      })
+    });
+  }
+
 
   const handleImageChange = e => {
     setImageObj(e.target.value);
@@ -100,6 +140,11 @@ function App() {
           <video src={uploadedVideo} controls />
         }
         <button onClick={send}>send</button>
+        <div style={{ display: "flex" }}>
+          <button onClick={signUp}>sign up</button>
+          <button onClick={login}>login</button>
+          <button onClick={getInfo}>fetch</button>
+        </div>
       </header>
 
     </div>
