@@ -20,21 +20,22 @@ export class AppController {
   ) { }
 
   @Post("/hello")
+  @UseJwtAuth()
   @FilesHandler()
-  async getHello(@Body() body: any, @UploadedFiles() files: globalThis.Express.Multer.File[]): Promise<any> {
-
+  async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
+    console.log(user)
     const imagePath = await this.imageService.save(files, body.imageId);
-    const audioPath = await this.audioService.save(files, body.audioId);
-    const videoPath = await this.videoService.saveSingleFile(files);
+    // const audioPath = await this.audioService.save(files, body.audioId);
+    // const videoPath = await this.videoService.saveSingleFile(files);
 
-    const filePath = await this.fileService.saveSingleFile(files);
-    const multipleImage = await this.imageService.saveSingleFileInMultipleSizes(files);
-    console.log(multipleImage)
-    console.log(filePath)
+    // const filePath = await this.fileService.saveSingleFile(files);
+    // const multipleImage = await this.imageService.saveSingleFileInMultipleSizes(files);
+    // console.log(multipleImage)
+    // console.log(filePath)
     return {
       image: imagePath,
-      audio: audioPath,
-      video: videoPath
+      // audio: audioPath,
+      // video: videoPath
     };
   }
 
@@ -59,7 +60,7 @@ export class AppController {
 
   @UseJwtAuth()
   @Post("/info")
-  getInfo(@RequestUser() user: User, @Req() req) {
+  getInfo(@RequestUser() user: RequestUserType) {
     console.log("hello")
     console.log(user)
   }
