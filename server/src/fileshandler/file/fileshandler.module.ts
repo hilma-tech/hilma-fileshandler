@@ -2,11 +2,11 @@ import { Module, DynamicModule } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { FilesHandlerOptions } from './interfaces/fIlesHandlerOptions.interface';
-import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from './consts';
+import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
+import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
 // import { UserModule } from '@hilma/auth-nest';
-import {UserModule} from '@hilma/auth-nest'
+import { UserModule } from '@hilma/auth-nest';
 
 //controllers
 import { ImageController } from './controllers/image.controller';

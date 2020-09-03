@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { MIME_TYPES } from '../../consts'
-import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
+import { MIME_TYPES } from '../../../common/consts'
+import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import * as randomstring from 'randomstring';
 export abstract class BaseFilesService {
     // protected files: { extension: string, file: globalThis.Express.Multer.File }[];

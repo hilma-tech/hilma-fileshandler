@@ -1,12 +1,12 @@
 import { Controller, Body, Post, UploadedFiles, Res, Req } from '@nestjs/common';
 import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAuth, Roles } from "@hilma/auth-nest";
 
-import { FilesHandler } from './fileshandler/filesHandler.decorator';
+import { FilesHandler } from './fileshandler/common/decorators/filesHandler.decorator';
 
-import { ImageService } from './fileshandler/services/upload/image.service';
-import { AudioService } from './fileshandler/services/upload/audio.service';
-import { FileService } from './fileshandler/services/upload/file.service';
-import { VideoService } from './fileshandler/services/upload/video.service';
+import { ImageService } from './fileshandler/file/services/upload/image.service';
+import { AudioService } from './fileshandler/file/services/upload/audio.service';
+import { FileService } from './fileshandler/file/services/upload/file.service';
+import { VideoService } from './fileshandler/file/services/upload/video.service';
 import { Response } from 'express';
 
 @Controller()

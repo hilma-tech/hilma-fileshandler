@@ -3,10 +3,10 @@ import { Observable } from "rxjs";
 import { Request } from 'express';
 
 //services
-import { ImageService } from "../services/upload/image.service";
-import { AudioService } from "../services/upload/audio.service";
-import { VideoService } from "../services/upload/video.service";
-import { FileService } from "../services/upload/file.service";
+import { ImageService } from "../../file/services/upload/image.service";
+import { AudioService } from "../../file/services/upload/audio.service";
+import { VideoService } from "../../file/services/upload/video.service";
+import { FileService } from "../../file/services/upload/file.service";
 
 
 @Injectable()

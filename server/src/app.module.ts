@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { FilesHandlerModule } from './fileshandler/fileshandler.module';
+import { FilesHandlerModule } from './fileshandler/file/fileshandler.module';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule, RoleModule } from '@hilma/auth-nest';
 

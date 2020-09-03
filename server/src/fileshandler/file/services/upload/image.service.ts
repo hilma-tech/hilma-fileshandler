@@ -5,8 +5,8 @@ import { imageSize } from 'image-size';
 import * as sharp from 'sharp';
 
 import { BaseFilesService } from './baseFile.service';
-import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
-import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../consts';
+import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
+import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
 
 @Injectable()
 export class ImageService extends BaseFilesService {

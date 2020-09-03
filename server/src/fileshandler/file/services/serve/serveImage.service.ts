@@ -1,7 +1,7 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { BaseServeFileService } from './baseServeFile.service';
-import { FilesHandlerOptions } from '../../interfaces/fIlesHandlerOptions.interface';
-import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES, MIME_TYPES } from '../../consts';
+import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
+import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES, MIME_TYPES } from '../../../common/consts';
 
 @Injectable()
 export class ServeImageService extends BaseServeFileService {
