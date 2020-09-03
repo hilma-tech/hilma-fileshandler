@@ -1,45 +1,23 @@
+import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as randomstring from 'randomstring';
+
+import { RequestUserType } from "@hilma/auth-nest";
 
 import { MIME_TYPES } from '../../../common/consts'
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
-import * as randomstring from 'randomstring';
+import { FilePermission } from '../../../filePermission/filePermission.entity';
+import { PermissionTypeEnum } from "../../../filePermission/enums/permissionType.enum";
+import { PermissionEnum } from "../../../filePermission/enums/permission.enum";
+
 export abstract class BaseFilesService {
-    // protected files: { extension: string, file: globalThis.Express.Multer.File }[];
 
     constructor(
         protected readonly options: FilesHandlerOptions,
         private readonly fileType: string,
+        protected readonly filePermissionRepository: Repository<FilePermission>
     ) { }
-
-    // public setClientFiles(files: globalThis.Express.Multer.File[]): void {
-    //     this.files = [];
-    //     files.forEach(file => {
-    //         for (let ext in MIME_TYPES[this.fileType]) {
-    //             if (MIME_TYPES[this.fileType][ext] === file.mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(file.mimetype)) {
-    //                 this.files.push({
-    //                     extension: ext,
-    //                     file
-    //                 });
-    //             }
-    //         }
-    //     });
-    // }
-
-    protected async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
-        const fileAbsolutePath = path.join(this.options.folder, this.fileType, fileName + "." + fileExtension);
-        await fs.promises.writeFile(fileAbsolutePath, buffer);
-    }
-
-    protected findExtension(mimetype: string): string {
-        for (let ext in MIME_TYPES[this.fileType]) {
-            if (MIME_TYPES[this.fileType][ext] === mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(mimetype)) {
-                return ext;
-            }
-        }
-
-        return null;
-    }
 
     public async save(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string> {
         const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
@@ -52,7 +30,7 @@ export abstract class BaseFilesService {
         if (!extension) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${this.fileType}.`);
         }
-        
+
         const fileName = await this.createUniqueFileName(extension);
 
         await this.saveFile(file.buffer, fileName, extension);
@@ -61,9 +39,23 @@ export abstract class BaseFilesService {
         return filePath;
     }
 
-    protected findFirstFileInType(files: globalThis.Express.Multer.File[]): globalThis.Express.Multer.File {
-        return files.find(file => this.findExtension(file.mimetype));
+    public async saveWithUserPermission(files: globalThis.Express.Multer.File[], clientFileId: number, user: RequestUserType): Promise<string> {
+        const path = await this.save(files, clientFileId);
+
+        const permission = new FilePermission();
+        permission.path = path;
+        permission.permission = PermissionEnum.allow;
+        permission.permissionType = PermissionTypeEnum.userId;
+        permission.roleName = null;
+        permission.userId = user.id;
+        console.log(permission)
+
+        await this.filePermissionRepository.save(permission);
+
+        return path;
     }
+
+
 
     public saveSingleFile(files: globalThis.Express.Multer.File[]): Promise<string> {
         const file = this.findFirstFileInType(files);
@@ -113,5 +105,24 @@ export abstract class BaseFilesService {
         } catch (err) {
             return false;
         }
+    }
+
+    protected findFirstFileInType(files: globalThis.Express.Multer.File[]): globalThis.Express.Multer.File {
+        return files.find(file => this.findExtension(file.mimetype));
+    }
+
+    protected async saveFile(buffer: Buffer, fileName: string, fileExtension: string): Promise<void> {
+        const fileAbsolutePath = path.join(this.options.folder, this.fileType, fileName + "." + fileExtension);
+        await fs.promises.writeFile(fileAbsolutePath, buffer);
+    }
+
+    protected findExtension(mimetype: string): string {
+        for (let ext in MIME_TYPES[this.fileType]) {
+            if (MIME_TYPES[this.fileType][ext] === mimetype || Array.isArray(MIME_TYPES[this.fileType][ext]) && MIME_TYPES[this.fileType][ext].includes(mimetype)) {
+                return ext;
+            }
+        }
+
+        return null;
     }
 }

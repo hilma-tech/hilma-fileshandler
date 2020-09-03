@@ -1,4 +1,7 @@
-import { Injectable, Scope, Inject } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import * as path from 'path';
 import * as fs from 'fs';
 import { imageSize } from 'image-size';
@@ -7,11 +10,12 @@ import * as sharp from 'sharp';
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
+import { FilePermission } from 'src/fileshandler/filePermission/filePermission.entity';
 
 @Injectable()
 export class ImageService extends BaseFilesService {
-    constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions) {
-        super(options, FILE_TYPES.IMAGE);
+    constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions, @InjectRepository(FilePermission) filePermissionRepository: Repository<FilePermission>) {
+        super(options, FILE_TYPES.IMAGE, filePermissionRepository);
     }
 
     async saveInSize(files: globalThis.Express.Multer.File[], clientFileId: number, width: number): Promise<string> {
@@ -100,7 +104,7 @@ export class ImageService extends BaseFilesService {
         if (!file) {
             throw new Error(`FilesHandler: cannot save a single image in size, image doesn't exist`);
         }
-        
+
         const clientFileId = parseInt(file.originalname);
         return this.saveMultipleSizes(files, clientFileId);
     }

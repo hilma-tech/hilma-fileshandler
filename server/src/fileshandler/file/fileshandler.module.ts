@@ -25,10 +25,13 @@ import { ServeImageService } from './services/serve/serveImage.service';
 import { ServeAudioService } from './services/serve/serveAudio.service';
 import { ServeFileService } from './services/serve/serveFile.service';
 import { ServeVideoService } from './services/serve/serveVideo.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { FilePermission } from '../filePermission/filePermission.entity';
 
 @Module({
     imports: [
-        UserModule
+        UserModule,
+        TypeOrmModule.forFeature([FilePermission])
     ],
     controllers: [
         ImageController,

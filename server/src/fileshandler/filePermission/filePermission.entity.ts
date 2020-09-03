@@ -1,16 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-// import { User } from '@hilma/auth-nest';
+import { User, Role } from '@hilma/auth-nest';
 
-
-enum PermissionType {
-    role = "role",
-    user_id = "user_id"
-};
-
-enum Permission {
-    allow = "allow",
-    deny = "deny"
-}
+import { PermissionEnum } from "./enums/permission.enum";
+import { PermissionTypeEnum } from "./enums/permissionType.enum";
 
 @Entity()
 export class FilePermission {
@@ -25,22 +17,33 @@ export class FilePermission {
     @Column({
         name: "permission_type",
         type: "enum",
-        enum: PermissionType
+        enum: PermissionTypeEnum,
     })
-    permissionType: PermissionType;
+    permissionType: PermissionTypeEnum;
 
     @Column({
+        type: "varchar",
         name: "role_name",
-        length: 30
+        nullable: true,
+        default: null
     })
     roleName: string;
+    // @ManyToOne(type => Role, role => role.name)
+    // role: any;
 
+    @Column({
+        type: "uuid",
+        name: "user_id",
+        nullable: true
+    })
+    userId: string;
     // @ManyToOne(type => User, user => user.id)
     // user: User;
 
+
     @Column({
         type: "enum",
-        enum: Permission
+        enum: PermissionEnum
     })
-    permission: Permission;
+    permission: PermissionEnum;
 }
