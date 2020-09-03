@@ -17,13 +17,14 @@ function App() {
   const [uploadedVideo, setUploadedVideo] = useState("");
 
   const send = async () => {
+    console.log(audioObj)
     const res = await filesUploader.fetch("/hello", {
       method: "POST",
       body: JSON.stringify({
         name: "michael",
         message,
         imageId: imageObj.id,
-        // audioId: audioObj.id,
+        audioId: audioObj.id,
         // fileId: fileObj.id
       })
     });
