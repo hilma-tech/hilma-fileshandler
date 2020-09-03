@@ -23,8 +23,8 @@ function App() {
         name: "michael",
         message,
         imageId: imageObj.id,
-        audioId: audioObj.id,
-        fileId: fileObj.id
+        // audioId: audioObj.id,
+        // fileId: fileObj.id
       })
     });
 
@@ -68,7 +68,6 @@ function App() {
       method: "POST",
       headers: {
         "Content-Type": 'application/json',
-        "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRmMGNlMjI4LTIyNTctNDE1ZC1hM2ZkLTMxYjFhOWFjY2Q0MiIsInVzZXJuYW1lIjoibWljaGFlbCIsInR5cGUiOiJVc2VyIiwicm9sZXMiOlsiYWRtaW4iXSwiaWF0IjoxNTk5MTE4OTQ3LCJleHAiOjE1OTkxMjQ5NDd9.KQBB69eKDBBuEJeLBZe8zgN486MP5lnH58ow1kkGUCY`
       },
       body: JSON.stringify({
       })
