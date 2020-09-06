@@ -23,11 +23,12 @@ export class AppController {
   @UseJwtAuth()
   @FilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
-    const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, user.roles[0]);
-    const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
+    const imagePath = await this.imageService.saveSingleFileInMultipleSizesWithUserPermission(files, user);
+    // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
+    console.log(imagePath)
     return {
-      image: imagePath,
-      audio: audioPath,
+      image: imagePath[0],
+      // audio: audioPath,
       // video: videoPath
     };
   }
@@ -56,7 +57,9 @@ export class AppController {
   async getInfo(@RequestUser() user: RequestUserType): Promise<void> {
     console.log("hello")
     console.log(user)
-    await this.imageService.deleteWithPermissions("/image/G3dvqzlogtkljuzPChFdcpGdvyU02rRC.png");
-    await this.audioService.deleteWithPermissions("/audio/z35WHprnlTAVRiQkbXB4jd0HuWrTUN7X.mpeg");
+    const a = await this.imageService.getAllImageSizes("/image/Pq42HgPDdJYo2CCH0jyL07malmmI29nM.m.png");
+    console.log(a);
+    const b = await  this.imageService.getAllImageSizes("/image/7FsXgDV6PkvYqmlCpOdSiR4LZXLiEE11.m.png");
+    console.log(b);
   }
 }
