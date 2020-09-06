@@ -5,6 +5,8 @@ import * as fs from 'fs';
 import { imageSize } from 'image-size';
 import * as sharp from 'sharp';
 
+import { RequestUserType } from '@hilma/auth-nest';
+
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
@@ -19,7 +21,7 @@ export class ImageService extends BaseFilesService {
         super(options, FILE_TYPES.IMAGE, filePermissionService);
     }
 
-    async saveInSize(files: globalThis.Express.Multer.File[], clientFileId: number, width: number): Promise<string> {
+    public async saveInSize(files: globalThis.Express.Multer.File[], clientFileId: number, width: number): Promise<string> {
         const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
 
         if (!file) {
@@ -48,6 +50,18 @@ export class ImageService extends BaseFilesService {
         return filePath;
     }
 
+    public async saveInSizeWithUserPermission(files: globalThis.Express.Multer.File[], clientFileId: number, width: number, user: RequestUserType): Promise<string> {
+        const path = await this.saveInSize(files, clientFileId, width);
+        this.filePermissionService.saveUserPermission(path, user);
+        return path;
+    }
+
+    public async saveInSizeWithRolePermission(files: globalThis.Express.Multer.File[], clientFileId: number, width: number, roleName: string): Promise<string> {
+        const path = await this.saveInSize(files, clientFileId, width);
+        this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
+    }
+
     public saveSingleFileInSize(files: globalThis.Express.Multer.File[], width: number): Promise<string> {
         const file = this.findFirstFileInType(files);
         if (!file) {
@@ -56,6 +70,18 @@ export class ImageService extends BaseFilesService {
 
         const clientFileId = parseInt(file.originalname);
         return this.saveInSize(files, clientFileId, width);
+    }
+
+    public async saveSingleFileInSizeWithUserPermission(files: globalThis.Express.Multer.File[], width: number, user: RequestUserType): Promise<string> {
+        const path = await this.saveSingleFileInSize(files, width);
+        this.filePermissionService.saveUserPermission(path, user);
+        return path;
+    }
+
+    public async saveSingleFileInSizeWithRolePermission(files: globalThis.Express.Multer.File[], width: number, roleName: string): Promise<string> {
+        const path = await this.saveSingleFileInSize(files, width);
+        this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
     }
 
     public async saveMultipleSizes(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string[]> {
@@ -100,6 +126,20 @@ export class ImageService extends BaseFilesService {
         return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${extension}`];
     }
 
+    public async saveMultipleSizesWithUserPermission(files: globalThis.Express.Multer.File[], clientFileId: number, user: RequestUserType): Promise<string[]> {
+        const paths = await this.saveMultipleSizes(files, clientFileId);
+        const pathForPermission = this.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveUserPermission(pathForPermission, user);
+        return paths;
+    }
+
+    public async saveMultipleSizesWithRolePermission(files: globalThis.Express.Multer.File[], clientFileId: number, roleName: string): Promise<string[]> {
+        const paths = await this.saveMultipleSizes(files, clientFileId);
+        const pathForPermission = this.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveRolePermission(pathForPermission, roleName);
+        return paths;
+    }
+
     public saveSingleFileInMultipleSizes(files: globalThis.Express.Multer.File[]): Promise<string[]> {
         const file = this.findFirstFileInType(files);
         if (!file) {
@@ -108,6 +148,20 @@ export class ImageService extends BaseFilesService {
 
         const clientFileId = parseInt(file.originalname);
         return this.saveMultipleSizes(files, clientFileId);
+    }
+
+    public async saveSingleFileInMultipleSizesWithUserPermission(files: globalThis.Express.Multer.File[], user: RequestUserType): Promise<string[]> {
+        const paths = await this.saveSingleFileInMultipleSizes(files);
+        const pathForPermission = this.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveUserPermission(pathForPermission, user);
+        return paths;
+    }
+
+    public async saveSingleFileInMultipleSizesWithRolePermission(files: globalThis.Express.Multer.File[], roleName: string): Promise<string[]> {
+        const paths = await this.saveSingleFileInMultipleSizes(files);
+        const pathForPermission = this.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveRolePermission(pathForPermission, roleName);
+        return paths;
     }
 
     public async deleteMultipleSizes(imagePath: string): Promise<void> {
@@ -131,6 +185,12 @@ export class ImageService extends BaseFilesService {
         );
 
         await Promise.all(deletePromises);
+    }
+
+    public async deleteMultipleSizesWithPermissions(imagePath: string): Promise<void> {
+        await this.deleteMultipleSizes(imagePath);
+        const pathForPermission = this.getPathForPermission(imagePath);
+        await this.filePermissionService.delete(pathForPermission);
     }
 
     private getSmallestSizeName(): string {
@@ -165,5 +225,11 @@ export class ImageService extends BaseFilesService {
         const exists = existsBySize.some(sizeExists => sizeExists);
 
         return exists;
+    }
+
+    private getPathForPermission(pathInSize: string): string {
+        const [typeAndName, _, extension] = pathInSize.split(".");
+        const pathForPermission = `${typeAndName}.${extension}`;
+        return pathForPermission;
     }
 }
