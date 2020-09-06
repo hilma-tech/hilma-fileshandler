@@ -193,6 +193,23 @@ export class ImageService extends BaseFilesService {
         await this.filePermissionService.delete(pathForPermission);
     }
 
+    public async getAllImageSizes(imageSizePath: string): Promise<string[]> {
+        const imageName = this.getNameFromPath(imageSizePath);
+        const extension = this.getExtensionFromMultipleSizesPath(imageSizePath);
+        const extensionsInSizes: string[] = [];
+        for (let sizeName in this.options.imageSizes) {
+            extensionsInSizes.push(`${sizeName}.${extension}`);
+        }
+
+        const existsPromises = extensionsInSizes.map(ext => super.fileExists(imageName, ext));
+        const existsArr = await Promise.all(existsPromises);
+
+        const paths = extensionsInSizes.map(ext => `/${FILE_TYPES.IMAGE}/${imageName}.${ext}`);
+        const existingPaths = paths.filter((path, index) => existsArr[index]);
+
+        return existingPaths;
+    }
+
     private getSmallestSizeName(): string {
         const sizeNames = Object.keys(this.options.imageSizes);
         let smallestSizeName = sizeNames[0];
@@ -231,5 +248,10 @@ export class ImageService extends BaseFilesService {
         const [typeAndName, _, extension] = pathInSize.split(".");
         const pathForPermission = `${typeAndName}.${extension}`;
         return pathForPermission;
+    }
+
+    private getExtensionFromMultipleSizesPath(path: string): string {
+        const parts = path.split(".");
+        return parts[parts.length - 1];
     }
 }

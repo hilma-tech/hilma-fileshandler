@@ -134,4 +134,10 @@ export abstract class BaseFilesService {
 
         return null;
     }
+
+    protected getNameFromPath(path: string): string {
+        const [pathWithoutExtension] = path.split(".");
+        const name = pathWithoutExtension.split("/")[2];
+        return name;
+    }
 }
