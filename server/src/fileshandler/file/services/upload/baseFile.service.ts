@@ -1,4 +1,3 @@
-import { Repository } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as randomstring from 'randomstring';
@@ -7,16 +6,14 @@ import { RequestUserType } from "@hilma/auth-nest";
 
 import { MIME_TYPES } from '../../../common/consts'
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
-import { FilePermission } from '../../../filePermission/filePermission.entity';
-import { PermissionTypeEnum } from "../../../filePermission/enums/permissionType.enum";
-import { PermissionEnum } from "../../../filePermission/enums/permission.enum";
+import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
 
 export abstract class BaseFilesService {
 
     constructor(
         protected readonly options: FilesHandlerOptions,
         private readonly fileType: string,
-        protected readonly filePermissionRepository: Repository<FilePermission>
+        protected readonly filePermissionService: FilePermissionService
     ) { }
 
     public async save(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string> {
@@ -41,20 +38,15 @@ export abstract class BaseFilesService {
 
     public async saveWithUserPermission(files: globalThis.Express.Multer.File[], clientFileId: number, user: RequestUserType): Promise<string> {
         const path = await this.save(files, clientFileId);
-
-        const permission = new FilePermission();
-        permission.path = path;
-        permission.permission = PermissionEnum.allow;
-        permission.permissionType = PermissionTypeEnum.userId;
-        permission.roleName = null;
-        permission.userId = user.id;
-        console.log(permission)
-
-        await this.filePermissionRepository.save(permission);
-
+        await this.filePermissionService.saveUserPermission(path, user);
         return path;
     }
 
+    public async saveWithRolePermission(files: globalThis.Express.Multer.File[], clientFileId: number, roleName: string): Promise<string> {
+        const path = await this.save(files, clientFileId);
+        await this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
+    }
 
 
     public saveSingleFile(files: globalThis.Express.Multer.File[]): Promise<string> {
@@ -67,9 +59,26 @@ export abstract class BaseFilesService {
         return this.save(files, clientFileId);
     }
 
+    public async saveSingleFileWithUserPermission(files: globalThis.Express.Multer.File[], user: RequestUserType): Promise<string> {
+        const path = await this.saveSingleFile(files);
+        await this.filePermissionService.saveUserPermission(path, user);
+        return path;
+    }
+
+    public async saveSingleFileWithRolePermission(files: globalThis.Express.Multer.File[], roleName: string): Promise<string> {
+        const path = await this.saveSingleFile(files);
+        await this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
+    }
+
     public async delete(filePath: string): Promise<void> {
         const fileAbsolutePath = path.join(this.options.folder, filePath);
         await fs.promises.unlink(fileAbsolutePath);
+    }
+
+    public async deleteWithPermissions(filePath: string): Promise<void> {
+        await this.delete(filePath);
+        await this.filePermissionService.delete(filePath);
     }
 
     /**

@@ -1,6 +1,4 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -10,12 +8,15 @@ import * as sharp from 'sharp';
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
-import { FilePermission } from 'src/fileshandler/filePermission/filePermission.entity';
+import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
 
 @Injectable()
 export class ImageService extends BaseFilesService {
-    constructor(@Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions, @InjectRepository(FilePermission) filePermissionRepository: Repository<FilePermission>) {
-        super(options, FILE_TYPES.IMAGE, filePermissionRepository);
+    constructor(
+        @Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions,
+        filePermissionService: FilePermissionService
+    ) {
+        super(options, FILE_TYPES.IMAGE, filePermissionService);
     }
 
     async saveInSize(files: globalThis.Express.Multer.File[], clientFileId: number, width: number): Promise<string> {
