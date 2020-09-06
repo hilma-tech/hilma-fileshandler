@@ -23,8 +23,8 @@ export class AppController {
   @UseJwtAuth()
   @FilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
-    const imagePath = await this.imageService.save(files, body.imageId);
-    const audioPath = await this.audioService.saveSingleFile(files);
+    const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, user.roles[0]);
+    const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
     return {
       image: imagePath,
       audio: audioPath,
@@ -53,8 +53,10 @@ export class AppController {
 
   @UseJwtAuth()
   @Post("/info")
-  getInfo(@RequestUser() user: RequestUserType) {
+  async getInfo(@RequestUser() user: RequestUserType): Promise<void> {
     console.log("hello")
     console.log(user)
+    await this.imageService.deleteWithPermissions("/image/G3dvqzlogtkljuzPChFdcpGdvyU02rRC.png");
+    await this.audioService.deleteWithPermissions("/audio/z35WHprnlTAVRiQkbXB4jd0HuWrTUN7X.mpeg");
   }
 }
