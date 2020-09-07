@@ -52,7 +52,7 @@ export abstract class BaseFilesService {
     public saveSingleFile(files: globalThis.Express.Multer.File[]): Promise<string> {
         const file = this.findFirstFileInType(files);
         if (!file) {
-            throw new Error(`FilesHandler: cannot save a single file, file doesn't exist`);
+            throw new Error(`FilesHandler: cannot save a single ${this.fileType}, file doesn't exist`);
         }
 
         const clientFileId = parseInt(file.originalname);
