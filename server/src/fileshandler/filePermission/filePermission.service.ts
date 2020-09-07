@@ -16,7 +16,7 @@ export class FilePermissionService {
         const permission = new FilePermission();
         permission.path = path;
         permission.permission = PermissionEnum.allow;
-        permission.permissionType = PermissionTypeEnum.userId;
+        permission.permissionType = PermissionTypeEnum.user;
         permission.roleName = null;
         permission.userId = user.id;
         await this.filePermissionRepository.save(permission);

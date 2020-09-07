@@ -46,3 +46,9 @@ export const MIME_TYPES: {
 }
 
 export const FILESHANDLER_OPTIONS_SIGN = "filesHandlerOptionsSign";
+
+export const SPECIAL_ROLES = {
+    EVERYONE: "$everyone",
+    AUTHENTICATED: "$authenticated",
+    UNAUTHENTICATED: "$unauthenticated"
+};

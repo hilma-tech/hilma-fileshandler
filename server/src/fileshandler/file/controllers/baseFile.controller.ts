@@ -18,7 +18,7 @@ export abstract class BaseFileController {
     @UseInterceptors(GetUserInterceptor)
     async getFile(@Req() req: Request, @Res() res: Response, @RequestUser() user: RequestUserType) {
         const { url } = req;
-        console.log(user);
+
         try {
             await this.fileService.validatePathWithPermissions(url, user);
         } catch (err) {
