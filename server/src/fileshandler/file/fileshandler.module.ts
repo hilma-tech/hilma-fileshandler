@@ -1,6 +1,7 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { JwtModule } from '@nestjs/jwt';
 
 import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
@@ -34,6 +35,7 @@ import { FilePermission } from '../filePermission/filePermission.entity';
     imports: [
         UserModule,
         TypeOrmModule.forFeature([FilePermission]),
+        JwtModule.register({secret: "secretKey"}),
         FilePermissionModule
     ],
     controllers: [
@@ -50,7 +52,7 @@ import { FilePermission } from '../filePermission/filePermission.entity';
         ServeImageService,
         ServeAudioService,
         ServeFileService,
-        ServeVideoService
+        ServeVideoService,
     ],
     exports: [
         ImageService,

@@ -1,13 +1,17 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
-
+import { RequestUserType } from '@hilma/auth-nest';
 import * as path from 'path';
 
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { MIME_TYPES } from '../../../common/consts';
+import { permissionsFilter } from '../../../filePermission/permissionsFilter';
 
 export class BaseServeFileService {
 
-    constructor(protected readonly options: FilesHandlerOptions, private readonly fileType: string) { }
+    constructor(
+        protected readonly options: FilesHandlerOptions,
+        private readonly fileType: string
+    ) { }
 
     public validatePath(url: string): void {
         const mimetypes = Object.keys(MIME_TYPES[this.fileType]);
@@ -19,10 +23,12 @@ export class BaseServeFileService {
         }
     }
 
-    public async validatePathWithPermissions(url: string) {
+    public async validatePathWithPermissions(url: string, user: RequestUserType) {
         this.validatePath(url);
 
-        if (false) { /// records permissins
+        const permissionsFilterFunc = this.options.permissionsFilter || permissionsFilter;
+        const allow = await permissionsFilterFunc(url, user, this.options.autoAllow);
+        if (!allow) {
             throw new ForbiddenException();
         }
     }
