@@ -23,13 +23,13 @@ export class AppController {
   @UseJwtAuth()
   @FilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
-    const imagePath = await this.imageService.saveSingleFileInMultipleSizesWithUserPermission(files, user);
+    const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, "nanana");
     // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
     // const videoPath = await this.videoService.saveSingleFileWithUserPermission(files, user);
     console.log(imagePath)
     // console.log(videoPath)
     return {
-      image: imagePath[0],
+      image: imagePath,
       // audio: audioPath,
       // video: videoPath
     };
