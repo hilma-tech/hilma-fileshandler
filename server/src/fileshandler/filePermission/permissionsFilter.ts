@@ -4,16 +4,18 @@ import { FilePermission } from './filePermission.entity';
 import { SPECIAL_ROLES } from '../common/consts';
 import { PermissionTypeEnum } from './enums/permissionType.enum';
 import { PermissionEnum } from './enums/permission.enum';
+import { getAuthenticatedPermissionRules, getUnauthenticatedPermissionRules } from './permissionRules';
+import { PermissionRule } from './permissionRule.type';
 
 export async function permissionsFilter(path: string, user: RequestUserType | null, autoAllow: boolean = false): Promise<boolean> {
 
-    const permissions = await getConnection()
+    const permissions: any = await getConnection()
         .createQueryBuilder()
         .select("fp")
         .from(FilePermission, "fp")
         .where("path=:path", { path })
         .andWhere(new Brackets(qb => {
-            qb.andWhere("permission_type = :role", { role: PermissionTypeEnum.role })
+            qb.where("permission_type = :role", { role: PermissionTypeEnum.role })
                 .andWhere("role_name IN (:...special_roles)", { special_roles: Object.values(SPECIAL_ROLES) });
 
             if (!user) {
@@ -26,34 +28,43 @@ export async function permissionsFilter(path: string, user: RequestUserType | nu
         }))
         .getMany();
 
-    const userPermissions = permissions.filter(permission => permission.permissionType === PermissionTypeEnum.user);
-    
-    //user permission - deny
-    const denyUserPermission = userPermissions.find(permission => permission.permission === PermissionEnum.deny);
-    if (denyUserPermission) {
-        return false;
+    const rules: PermissionRule[] =
+        user
+            ?
+            getAuthenticatedPermissionRules(user)
+            :
+            getUnauthenticatedPermissionRules();
+
+    for (let rule of rules) {
+        const rulePermissions = permissions.filter(permission =>
+            permission.permissionType === rule.permissionType
+            &&
+            (
+                !rule.role
+                ||
+                (
+                    typeof rule.role === "string"
+                        ?
+                        rule.role === permission.roleName
+                        :
+                        rule.role.includes(permission.roleName)
+                )
+            )
+        );
+
+        const deny = rulePermissions.find(permission => permission.permission === PermissionEnum.deny);
+        if (deny) {
+            return false;
+        }
+
+        if (rulePermissions.length) {
+            return true;
+        }
     }
 
-    //user permission - allow
-    const allowUserPermission = userPermissions.find(permission => permission.permission === PermissionEnum.allow);
-    if (allowUserPermission) {
+    if (autoAllow) {
         return true;
     }
-
-    const rolePermissions = permissions.filter(permission => user && permission.permissionType === PermissionTypeEnum.role && user.roles.includes(permission.roleName));
-    
-    //role permission - deny
-    const denyRolePermission = rolePermissions.find(permission => permission.permission === PermissionEnum.deny);
-    if(denyRolePermission){
-        return false;
-    }
-
-    //role permission - deny
-    const allowRolePermission = rolePermissions.find(permission => permission.permission === PermissionEnum.allow);
-    if(allowRolePermission){
-        return true;
-    }
-
 
     return false;
 };

@@ -13,7 +13,8 @@ import { UserModule, RoleModule } from '@hilma/auth-nest';
         m: 800,
         l: 1200,
         xl: 1600
-      }
+      },
+      autoAllow: false
     }),
     TypeOrmModule.forRoot(),
     UserModule,
