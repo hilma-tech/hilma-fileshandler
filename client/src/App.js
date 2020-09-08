@@ -55,18 +55,18 @@ function App() {
   //   });
   // }
 
-  // const login = async () => {
-  //   await fetch("/login", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       username: "michael",
-  //       password: "Qw12345"
-  //     })
-  //   });
-  // }
+  const login = async () => {
+    await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({
+        username: "michael",
+        password: "Qw12345"
+      })
+    });
+  }
 
   // const getInfo = async () => {
   //   console.log("here")
@@ -149,9 +149,9 @@ function App() {
         <div style={{ display: "flex" }}>
           <button onClick={() => setShow(current => !current)}>toggle show</button>
           <button onClick={() => setShowClass(current => !current)} >toggle show class</button>
-          {/* <button onClick={signUp}>sign up</button>
+          {/* <button onClick={signUp}>sign up</button> */}
           <button onClick={login}>login</button>
-          <button onClick={getInfo}>fetch</button> */}
+          {/* <button onClick={getInfo}>fetch</button> */}
         </div>
 
 
