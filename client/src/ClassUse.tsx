@@ -1,7 +1,7 @@
 import React from 'react';
 import withFiles from './fileshandler/withFiles';
 import FilesUploader from './fileshandler/FilesUploader';
-import FilesInput from './fileshandler/FilesInput';
+import FilesInput from './fileshandler/FileInput';
 
 export interface ClassUseProps {
     filesUploader: FilesUploader;

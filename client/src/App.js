@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import FileInput from './fileshandler/FilesInput';
+import FileInput from './fileshandler/FileInput';
 import useFiles from './fileshandler/useFiles';
 import FunctionalUse from './FunctionalUse';
 import ClassUse from './ClassUse';
@@ -23,23 +23,23 @@ function App() {
 
   // const send = async () => {
   //   console.log(audioObj)
-    // const res = await filesUploader.fetch("/hello", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     name: "michael",
-    //     message,
-    //     imageId: imageObj.id,
-    //     // audioId: audioObj.id,
-    //     // fileId: fileObj.id
-    //   })
-    // });
+  // const res = await filesUploader.fetch("/hello", {
+  //   method: "POST",
+  //   body: JSON.stringify({
+  //     name: "michael",
+  //     message,
+  //     imageId: imageObj.id,
+  //     // audioId: audioObj.id,
+  //     // fileId: fileObj.id
+  //   })
+  // });
 
-    // const data = await res.json();
+  // const data = await res.json();
 
-    // setUploadedImage(data.image);
-    // setUploadedAudio(data.audio);
-    // setUploadedVideo(data.video);
-    // alert("done");
+  // setUploadedImage(data.image);
+  // setUploadedAudio(data.audio);
+  // setUploadedVideo(data.video);
+  // alert("done");
   // }
 
   // const signUp = async () => {
@@ -103,7 +103,6 @@ function App() {
         <h1>
           FilesHandler
         </h1>
-
         {/* image
         <FileInput type="image" filesUploader={filesUploader} onChange={handleImageChange} />
         {

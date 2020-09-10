@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useFiles from './fileshandler/useFiles';
-import FileInput from './fileshandler/FilesInput';
+import FileInput from './fileshandler/FileInput';
 
 const FunctionalUse: React.FC = () => {
     const filesUploader = useFiles();
