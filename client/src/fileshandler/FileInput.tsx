@@ -1,16 +1,24 @@
-import React, { useMemo, useRef } from 'react';
+import React, { FC, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { ACCEPTS, TYPES } from './consts';
 import FilesUploader from './FilesUploader';
+import UploadedFile from './UploadedFile.interface';
+import FileType from './FileType.type';
 
+interface FileInputProps {
+    onChange: (e: { target: { value: UploadedFile } }) => void;
+    filesUploader: FilesUploader,
+    type: FileType,
+    singleUpload?: boolean;
+}
 
-function FileInput(props) {
+const FileInput: React.FC<FileInputProps> = props => {
     const { onChange, filesUploader, type, singleUpload = true, ...otherProps } = props;
 
-    const lastUploadedFile = useRef(null);
+    const lastUploadedFile = useRef<UploadedFile | null>(null);
 
-    const handleChange = e => {
-        const file = e.target.files[0];
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const file = (e.target.files as FileList)[0];
 
         if (!file) {
             return;
@@ -35,7 +43,7 @@ function FileInput(props) {
         lastUploadedFile.current = uploadRes;
     }
 
-    const accept = useMemo(() => "." + ACCEPTS[type].join(", ."), [type]);
+    const accept = useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
 
     return (
         <input type="file" onChange={handleChange} accept={accept} {...otherProps} />
@@ -43,11 +51,8 @@ function FileInput(props) {
 }
 
 FileInput.propTypes = {
-    type: PropTypes.oneOf(TYPES).isRequired,
-    filesUploader: PropTypes.oneOfType([
-        PropTypes.instanceOf(FilesUploader).isRequired,
-        PropTypes.object
-    ]),
+    type: PropTypes.oneOf(TYPES).isRequired ,
+    filesUploader: PropTypes.instanceOf(FilesUploader).isRequired,
     onChange: PropTypes.func.isRequired,
     singleUpload: PropTypes.bool
 };

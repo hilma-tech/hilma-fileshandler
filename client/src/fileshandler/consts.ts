@@ -1,6 +1,8 @@
-export const TYPES = ["image", "audio", "video", "file"]
+import FileType from "./FileType.type";
 
-export const ACCEPTS = {
+export const TYPES: FileType[] = ["image", "audio", "video", "file"];
+
+export const ACCEPTS: { [key in FileType]: string[] } = {
     file: [
         "pdf",
         "doc",
