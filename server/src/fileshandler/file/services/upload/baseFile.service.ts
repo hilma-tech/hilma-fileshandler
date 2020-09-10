@@ -4,7 +4,7 @@ import * as randomstring from 'randomstring';
 
 import { RequestUserType } from "@hilma/auth-nest";
 
-import { MIME_TYPES } from '../../../common/consts'
+import { MIME_TYPES } from '../../../common/consts';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
 
