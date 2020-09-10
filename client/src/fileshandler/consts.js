@@ -11,7 +11,7 @@ export const ACCEPTS = {
         "png",
         "jpeg",
         "gif",
-        "svg"
+        // "svg"
     ],
     audio: [
         "mp3",
