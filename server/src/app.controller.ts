@@ -1,12 +1,8 @@
-import { Controller, Body, Post, UploadedFiles, Res, Req } from '@nestjs/common';
+import { Controller, Body, Post, Res, Req } from '@nestjs/common';
 import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAuth, Roles } from "@hilma/auth-nest";
 
-import { FilesHandler } from './fileshandler/common/decorators/filesHandler.decorator';
 
-import { ImageService } from './fileshandler/file/services/upload/image.service';
-import { AudioService } from './fileshandler/file/services/upload/audio.service';
-import { FileService } from './fileshandler/file/services/upload/file.service';
-import { VideoService } from './fileshandler/file/services/upload/video.service';
+import { UploadedFiles, UseFilesHandler, ImageService, AudioService, FileService, VideoService } from './index';
 import { Response } from 'express';
 
 @Controller()
@@ -21,7 +17,7 @@ export class AppController {
 
   @Post("/hello")
   @UseJwtAuth()
-  @FilesHandler()
+  @UseFilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
     const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, "admin");
     // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
@@ -61,7 +57,7 @@ export class AppController {
     console.log(user)
     const a = await this.imageService.getAllImageSizes("/image/Pq42HgPDdJYo2CCH0jyL07malmmI29nM.m.png");
     console.log(a);
-    const b = await  this.imageService.getAllImageSizes("/image/7FsXgDV6PkvYqmlCpOdSiR4LZXLiEE11.m.png");
+    const b = await this.imageService.getAllImageSizes("/image/7FsXgDV6PkvYqmlCpOdSiR4LZXLiEE11.m.png");
     console.log(b);
   }
 }
