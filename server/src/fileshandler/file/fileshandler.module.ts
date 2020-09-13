@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
-import { UserModule } from '@hilma/auth-nest';
+import { RoleModule, UserModule } from '@hilma/auth-nest';
 
 //file permission
 import { FilePermissionModule } from '../filePermission/filePermission.module';
@@ -28,14 +28,12 @@ import { ServeImageService } from './services/serve/serveImage.service';
 import { ServeAudioService } from './services/serve/serveAudio.service';
 import { ServeFileService } from './services/serve/serveFile.service';
 import { ServeVideoService } from './services/serve/serveVideo.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { FilePermission } from '../filePermission/filePermission.entity';
 
 @Module({
     imports: [
         UserModule,
-        TypeOrmModule.forFeature([FilePermission]),
-        JwtModule.register({secret: "secretKey"}),
+        JwtModule.register({ secret: "secretKey" }),
         FilePermissionModule
     ],
     controllers: [
