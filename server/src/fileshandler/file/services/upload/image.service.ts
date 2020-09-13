@@ -10,7 +10,8 @@ import { RequestUserType } from '@hilma/auth-nest';
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
-import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
+// import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
+import { FilePermissionService } from '../../../filePermission/filePermission.service';
 
 @Injectable()
 export class ImageService extends BaseFilesService {
