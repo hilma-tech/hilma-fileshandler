@@ -6,7 +6,7 @@ import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
 
 interface FileInputProps {
-    onChange: (e: { target: { value: UploadedFile } }) => void;
+    onChange?: (e: { target: { value: UploadedFile } }) => void;
     filesUploader: FilesUploader,
     type: FileType,
     singleUpload?: boolean;
@@ -25,12 +25,13 @@ const FileInput: React.FC<FileInputProps> = props => {
         }
 
         const uploadRes = filesUploader.upload(file);
-
-        onChange({
-            target: {
-                value: uploadRes
-            }
-        });
+        if (onChange) {
+            onChange({
+                target: {
+                    value: uploadRes
+                }
+            });
+        }
 
         if (!singleUpload) {
             return;
@@ -51,9 +52,9 @@ const FileInput: React.FC<FileInputProps> = props => {
 }
 
 FileInput.propTypes = {
-    type: PropTypes.oneOf(TYPES).isRequired ,
+    type: PropTypes.oneOf(TYPES).isRequired,
     filesUploader: PropTypes.instanceOf(FilesUploader).isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     singleUpload: PropTypes.bool
 };
 
