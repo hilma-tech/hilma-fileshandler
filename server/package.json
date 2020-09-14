@@ -1,11 +1,14 @@
 {
   "name": "@hilma/fileshandler-server",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "author": "Michael Segal <michael@carmel6000.amitnet.org>",
   "private": false,
   "license": "UNLICENSED",
   "main": "dist/src/index.js",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
