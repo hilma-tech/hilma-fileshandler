@@ -11,7 +11,7 @@ import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
 import { FilePermissionService } from '../../../filePermission/filePermission.service';
-import { FilesType } from 'src/fileshandler/common/types/files.type';
+import { FilesType } from '../../../common/types/files.type';
 
 @Injectable()
 export class ImageService extends BaseFilesService {
