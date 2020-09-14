@@ -28,4 +28,4 @@ export * from './fileshandler/filePermission/filePermission.service';
 
 //exports from other modules - only for convinient
 export { UploadedFiles } from '@nestjs/common';
-export type FilesType = globalThis.Express.Multer.File[];
+export * from './fileshandler/common/types/files.type';

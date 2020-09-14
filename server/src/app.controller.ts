@@ -4,6 +4,7 @@ import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAu
 
 import { UploadedFiles, UseFilesHandler, ImageService, AudioService, FileService, VideoService } from './index';
 import { Response } from 'express';
+import { FilesType } from './fileshandler/common/types/files.type';
 
 @Controller()
 export class AppController {
@@ -18,7 +19,7 @@ export class AppController {
   @Post("/hello")
   @UseJwtAuth()
   @UseFilesHandler()
-  async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: globalThis.Express.Multer.File[], @Body() body: any): Promise<any> {
+  async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: FilesType, @Body() body: any): Promise<any> {
     const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, "admin");
     // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
     // const videoPath = await this.videoService.saveSingleFileWithUserPermission(files, user);

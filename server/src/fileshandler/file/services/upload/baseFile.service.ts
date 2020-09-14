@@ -6,8 +6,8 @@ import { RequestUserType } from "@hilma/auth-nest";
 
 import { MIME_TYPES } from '../../../common/consts';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
-// import { FilePermissionService } from 'src/fileshandler/filePermission/filePermission.service';
 import { FilePermissionService } from '../../../filePermission/filePermission.service';
+import { FilesType } from '../../../common/types/files.type';
 
 export abstract class BaseFilesService {
 
@@ -17,7 +17,7 @@ export abstract class BaseFilesService {
         protected readonly filePermissionService: FilePermissionService
     ) { }
 
-    public async save(files: globalThis.Express.Multer.File[], clientFileId: number): Promise<string> {
+    public async save(files: FilesType, clientFileId: number): Promise<string> {
         const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
 
         if (!file) {
@@ -37,20 +37,20 @@ export abstract class BaseFilesService {
         return filePath;
     }
 
-    public async saveWithUserPermission(files: globalThis.Express.Multer.File[], clientFileId: number, user: RequestUserType): Promise<string> {
+    public async saveWithUserPermission(files: FilesType, clientFileId: number, user: RequestUserType): Promise<string> {
         const path = await this.save(files, clientFileId);
         await this.filePermissionService.saveUserPermission(path, user);
         return path;
     }
 
-    public async saveWithRolePermission(files: globalThis.Express.Multer.File[], clientFileId: number, roleName: string): Promise<string> {
+    public async saveWithRolePermission(files: FilesType, clientFileId: number, roleName: string): Promise<string> {
         const path = await this.save(files, clientFileId);
         await this.filePermissionService.saveRolePermission(path, roleName);
         return path;
     }
 
 
-    public saveSingleFile(files: globalThis.Express.Multer.File[]): Promise<string> {
+    public saveSingleFile(files: FilesType): Promise<string> {
         const file = this.findFirstFileInType(files);
         if (!file) {
             throw new Error(`FilesHandler: cannot save a single ${this.fileType}, file doesn't exist`);
@@ -60,13 +60,13 @@ export abstract class BaseFilesService {
         return this.save(files, clientFileId);
     }
 
-    public async saveSingleFileWithUserPermission(files: globalThis.Express.Multer.File[], user: RequestUserType): Promise<string> {
+    public async saveSingleFileWithUserPermission(files: FilesType, user: RequestUserType): Promise<string> {
         const path = await this.saveSingleFile(files);
         await this.filePermissionService.saveUserPermission(path, user);
         return path;
     }
 
-    public async saveSingleFileWithRolePermission(files: globalThis.Express.Multer.File[], roleName: string): Promise<string> {
+    public async saveSingleFileWithRolePermission(files: FilesType, roleName: string): Promise<string> {
         const path = await this.saveSingleFile(files);
         await this.filePermissionService.saveRolePermission(path, roleName);
         return path;
@@ -117,7 +117,7 @@ export abstract class BaseFilesService {
         }
     }
 
-    protected findFirstFileInType(files: globalThis.Express.Multer.File[]): globalThis.Express.Multer.File {
+    protected findFirstFileInType(files: FilesType): globalThis.Express.Multer.File {
         return files.find(file => this.findExtension(file.mimetype));
     }
 
