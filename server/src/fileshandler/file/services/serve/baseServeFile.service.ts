@@ -23,11 +23,11 @@ export class BaseServeFileService {
         }
     }
 
-    public async validatePathWithPermissions(url: string, user: RequestUserType) {
+    public async validatePathWithPermissions(url: string, user: RequestUserType): Promise<void> {
         this.validatePath(url);
-
+        const path = this.getPathForPermission(url);
         const permissionsFilterFunc = this.options.permissionsFilter || permissionsFilter;
-        const allow = await permissionsFilterFunc(url, user, this.options.autoAllow);
+        const allow = await permissionsFilterFunc(path, user, this.options.autoAllow);
         if (!allow) {
             throw new ForbiddenException();
         }
@@ -52,5 +52,10 @@ export class BaseServeFileService {
         }
 
         return mimetype;
+    }
+
+    //this function exists so other services (like serveImageService), that extends this one could override it
+    protected getPathForPermission(path: string): string {
+        return path;
     }
 }
