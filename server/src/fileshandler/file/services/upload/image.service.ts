@@ -51,9 +51,9 @@ export class ImageService extends BaseFilesService {
         return filePath;
     }
 
-    public async saveInSizeWithUserPermission(files: FilesType, clientFileId: number, width: number, user: RequestUserType): Promise<string> {
+    public async saveInSizeWithUserPermission(files: FilesType, clientFileId: number, width: number, userId: string): Promise<string> {
         const path = await this.saveInSize(files, clientFileId, width);
-        this.filePermissionService.saveUserPermission(path, user);
+        this.filePermissionService.saveUserPermission(path, userId);
         return path;
     }
 
@@ -73,9 +73,9 @@ export class ImageService extends BaseFilesService {
         return this.saveInSize(files, clientFileId, width);
     }
 
-    public async saveSingleFileInSizeWithUserPermission(files: FilesType, width: number, user: RequestUserType): Promise<string> {
+    public async saveSingleFileInSizeWithUserPermission(files: FilesType, width: number, userId: string): Promise<string> {
         const path = await this.saveSingleFileInSize(files, width);
-        this.filePermissionService.saveUserPermission(path, user);
+        this.filePermissionService.saveUserPermission(path, userId);
         return path;
     }
 
@@ -127,10 +127,10 @@ export class ImageService extends BaseFilesService {
         return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${extension}`];
     }
 
-    public async saveMultipleSizesWithUserPermission(files: FilesType, clientFileId: number, user: RequestUserType): Promise<string[]> {
+    public async saveMultipleSizesWithUserPermission(files: FilesType, clientFileId: number, userId: string): Promise<string[]> {
         const paths = await this.saveMultipleSizes(files, clientFileId);
         const pathForPermission = this.getPathForPermission(paths[0]);
-        await this.filePermissionService.saveUserPermission(pathForPermission, user);
+        await this.filePermissionService.saveUserPermission(pathForPermission, userId);
         return paths;
     }
 
@@ -151,10 +151,10 @@ export class ImageService extends BaseFilesService {
         return this.saveMultipleSizes(files, clientFileId);
     }
 
-    public async saveSingleFileInMultipleSizesWithUserPermission(files: FilesType, user: RequestUserType): Promise<string[]> {
+    public async saveSingleFileInMultipleSizesWithUserPermission(files: FilesType, userId: string): Promise<string[]> {
         const paths = await this.saveSingleFileInMultipleSizes(files);
         const pathForPermission = this.getPathForPermission(paths[0]);
-        await this.filePermissionService.saveUserPermission(pathForPermission, user);
+        await this.filePermissionService.saveUserPermission(pathForPermission, userId);
         return paths;
     }
 

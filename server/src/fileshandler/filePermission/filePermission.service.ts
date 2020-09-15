@@ -12,13 +12,13 @@ export class FilePermissionService {
         @InjectRepository(FilePermission) private readonly filePermissionRepository: Repository<FilePermission>
     ) { }
 
-    public async saveUserPermission(path: string, user: RequestUserType): Promise<void> {
+    public async saveUserPermission(path: string, userId: string): Promise<void> {
         const permission = new FilePermission();
         permission.path = path;
         permission.permission = PermissionEnum.allow;
         permission.permissionType = PermissionTypeEnum.user;
         permission.roleName = null;
-        permission.userId = user.id;
+        permission.userId = userId;
         await this.filePermissionRepository.save(permission);
     }
 

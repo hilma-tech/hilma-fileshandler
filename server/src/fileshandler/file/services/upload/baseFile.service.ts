@@ -37,9 +37,9 @@ export abstract class BaseFilesService {
         return filePath;
     }
 
-    public async saveWithUserPermission(files: FilesType, clientFileId: number, user: RequestUserType): Promise<string> {
+    public async saveWithUserPermission(files: FilesType, clientFileId: number, userId: string): Promise<string> {
         const path = await this.save(files, clientFileId);
-        await this.filePermissionService.saveUserPermission(path, user);
+        await this.filePermissionService.saveUserPermission(path, userId);
         return path;
     }
 
@@ -60,9 +60,9 @@ export abstract class BaseFilesService {
         return this.save(files, clientFileId);
     }
 
-    public async saveSingleFileWithUserPermission(files: FilesType, user: RequestUserType): Promise<string> {
+    public async saveSingleFileWithUserPermission(files: FilesType, userId: string): Promise<string> {
         const path = await this.saveSingleFile(files);
-        await this.filePermissionService.saveUserPermission(path, user);
+        await this.filePermissionService.saveUserPermission(path, userId);
         return path;
     }
 
