@@ -20,14 +20,16 @@ export class AppController {
   @UseJwtAuth()
   @UseFilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: FilesType, @Body() body: any): Promise<any> {
-    const imagePath = await this.imageService.saveSingleFileWithRolePermission(files, "admin");
-    // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user);
+    console.log("here")
+    // const imagePath = await this.imageService.saveSingleFileInMultipleSizesWithRolePermission(files, "admin");
+    const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user.id);
     // const videoPath = await this.videoService.saveSingleFileWithUserPermission(files, user);
     // console.log(imagePath)
     // console.log(videoPath)
+    // console.log(imagePath)
     return {
-      image: imagePath,
-      // audio: audioPath,
+      // image: imagePath[0],
+      audio: audioPath,
       // video: videoPath
     };
   }
