@@ -65,6 +65,7 @@ export class FilesHandlerModule {
         FilesHandlerModule.createFolders(options);
 
         return {
+            global: true, // think more about it
             module: FilesHandlerModule,
             providers: [
                 {
