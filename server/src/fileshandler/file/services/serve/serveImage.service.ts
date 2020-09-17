@@ -13,7 +13,7 @@ export class ServeImageService extends BaseServeFileService {
     public validatePath(url: string): void {
         const mimetypes = Object.keys(MIME_TYPES[FILE_TYPES.IMAGE]);
         const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
-        const sizeNames = Object.keys(this.options.imageSizes);
+        const sizeNames = this.options.imageSizes ? Object.keys(this.options.imageSizes) : [];
         const sizeNamesWithParenthesis = sizeNames.map(sizeName => `(${sizeName})`);
 
         const regex = new RegExp(`^/${FILE_TYPES.IMAGE}/[0-9a-zA-Z]{32}(\\.(${sizeNamesWithParenthesis.join("|")}))?\\.(${mimeTypesWithParenthesis.join("|")})$`);
@@ -24,7 +24,9 @@ export class ServeImageService extends BaseServeFileService {
     }
 
     protected getPathForPermission(pathInSize: string): string { // there is a duplication of this function in image.service.ts
-        const [typeAndName, _, extension] = pathInSize.split(".");
+        const pathParts = pathInSize.split(".");
+        const typeAndName = pathParts[0];
+        const extension = pathParts[pathParts.length - 1];
         const pathForPermission = `${typeAndName}.${extension}`;
         return pathForPermission;
     }
