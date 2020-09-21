@@ -7,8 +7,8 @@ import FileType from './FileType.type';
 
 interface FileInputProps {
     onChange?: (e: { target: { value: UploadedFile } }) => void;
-    filesUploader: FilesUploader,
-    type: FileType,
+    filesUploader: FilesUploader;
+    type: FileType;
     singleUpload?: boolean;
 }
 

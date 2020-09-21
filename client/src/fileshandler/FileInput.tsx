@@ -6,13 +6,13 @@ import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
 
 interface FileInputProps {
-    onChange: (e: { target: { value: UploadedFile } }) => void;
-    filesUploader: FilesUploader,
-    type: FileType,
+    onChange?: (e: { target: { value: UploadedFile } }) => void;
+    filesUploader: FilesUploader;
+    type: FileType;
     singleUpload?: boolean;
 }
 
-const FileInput: React.FC<FileInputProps> = props => {
+const FileInput: FC<FileInputProps> = props => {
     const { onChange, filesUploader, type, singleUpload = true, ...otherProps } = props;
 
     const lastUploadedFile = useRef<UploadedFile | null>(null);
@@ -26,11 +26,13 @@ const FileInput: React.FC<FileInputProps> = props => {
 
         const uploadRes = filesUploader.upload(file);
 
-        onChange({
-            target: {
-                value: uploadRes
-            }
-        });
+        if (onChange) {
+            onChange({
+                target: {
+                    value: uploadRes
+                }
+            });
+        }
 
         if (!singleUpload) {
             return;
@@ -51,9 +53,9 @@ const FileInput: React.FC<FileInputProps> = props => {
 }
 
 FileInput.propTypes = {
-    type: PropTypes.oneOf(TYPES).isRequired ,
+    type: PropTypes.oneOf(TYPES).isRequired,
     filesUploader: PropTypes.instanceOf(FilesUploader).isRequired,
-    onChange: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
     singleUpload: PropTypes.bool
 };
 
