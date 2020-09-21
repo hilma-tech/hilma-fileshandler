@@ -5,7 +5,7 @@ import FilesUploader from './FilesUploader';
 import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
 
-interface FileInputProps {
+interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
     onChange?: (e: { target: { value: UploadedFile[] } }) => void;
     filesUploader: FilesUploader;
     type: FileType;

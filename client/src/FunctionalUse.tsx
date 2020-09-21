@@ -34,7 +34,7 @@ const FunctionalUse: React.FC = () => {
 
 
             function
-            <FileInput type="image" filesUploader={filesUploader} onChange={handleImageChange} />
+            <FileInput style={{}} type="image" filesUploader={filesUploader} onChange={handleImageChange} />
             {
                 imageObj &&
                 <img src={imageObj.link} />

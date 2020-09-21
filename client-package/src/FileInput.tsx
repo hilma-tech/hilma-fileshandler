@@ -1,18 +1,18 @@
-import React, { useMemo, useRef } from 'react';
+import React, { FC, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { ACCEPTS, TYPES } from './consts';
 import FilesUploader from './FilesUploader';
 import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
 
-interface FileInputProps {
+interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
     onChange?: (e: { target: { value: UploadedFile } }) => void;
     filesUploader: FilesUploader;
     type: FileType;
     singleUpload?: boolean;
 }
 
-const FileInput: React.FC<FileInputProps> = props => {
+const FileInput: FC<FileInputProps> = props => {
     const { onChange, filesUploader, type, singleUpload = true, ...otherProps } = props;
 
     const lastUploadedFile = useRef<UploadedFile | null>(null);
