@@ -63,4 +63,12 @@ export class AppController {
     const b = await this.imageService.getAllImageSizes("/image/7FsXgDV6PkvYqmlCpOdSiR4LZXLiEE11.m.png");
     console.log(b);
   }
+
+  @Post("/multiple")
+  @UseFilesHandler()
+  async multiple(@UploadedFiles() files: FilesType, @Body() body: { id: number, link: string }[]): Promise<any> {
+    const res = await Promise.all(body.map(item => this.imageService.saveWithRolePermission(files, item.id, "admin")))
+    console.log(res);
+    console.log(body);
+  }
 }

@@ -4,12 +4,15 @@ import FileInput from './fileshandler/FileInput';
 import useFiles from './fileshandler/useFiles';
 import FunctionalUse from './FunctionalUse';
 import ClassUse from './ClassUse';
+import MultipleFilesUse from './MultipleFilesUse';
 
 function App() {
   const filesUploader = useFiles();
 
   const [show, setShow] = useState(false);
   const [showClass, setShowClass] = useState(false);
+  const [showMultiple, setShowMultiple] = useState(false);
+
 
   const [audioObj, setAudioObj] = useState(null);
 
@@ -55,7 +58,7 @@ function App() {
         <h1>
           FilesHandler
         </h1>
-        
+
         audio
         <FileInput type="audio" filesUploader={filesUploader} onChange={handleAudioChange} />
         {
@@ -70,12 +73,13 @@ function App() {
           uploadedAudio &&
           <audio src={uploadedAudio} controls />
         }
-     
+
         <button onClick={send}>send</button>
 
         <div style={{ display: "flex" }}>
           <button onClick={() => setShow(current => !current)}>toggle show</button>
           <button onClick={() => setShowClass(current => !current)} >toggle show class</button>
+          <button onClick={() => setShowMultiple(current => !current)} >toggle show multiple</button>
           <button onClick={login}>login</button>
         </div>
 
@@ -88,6 +92,11 @@ function App() {
         {
           showClass &&
           <ClassUse />
+        }
+
+        {
+          showMultiple &&
+          <MultipleFilesUse />
         }
       </header>
 
