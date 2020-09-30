@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
-import { RoleModule, UserModule } from '@hilma/auth-nest';
+import {  UserModule } from '@hilma/auth-nest';
 
 //file permission
 import { FilePermissionModule } from '../filePermission/filePermission.module';
@@ -28,7 +28,6 @@ import { ServeImageService } from './services/serve/serveImage.service';
 import { ServeAudioService } from './services/serve/serveAudio.service';
 import { ServeFileService } from './services/serve/serveFile.service';
 import { ServeVideoService } from './services/serve/serveVideo.service';
-import { FilePermission } from '../filePermission/filePermission.entity';
 
 @Module({
     imports: [
@@ -62,6 +61,9 @@ import { FilePermission } from '../filePermission/filePermission.entity';
 export class FilesHandlerModule {
     static register(options: FilesHandlerOptions): DynamicModule {
 
+        //find absolute path
+        options.folder = FilesHandlerModule.findFolderPath(options.folder);
+
         FilesHandlerModule.createFolders(options);
 
         return {
@@ -81,5 +83,9 @@ export class FilesHandlerModule {
             const folderPath = path.join(options.folder, fileType);
             fs.mkdirSync(folderPath, { recursive: true });
         });
+    }
+
+    private static findFolderPath(relativaePath: string): string {
+        return path.resolve("../../../../../../dist", relativaePath);
     }
 }
