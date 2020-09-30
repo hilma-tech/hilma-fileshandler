@@ -16,11 +16,6 @@ export class AppController {
     private readonly userService: UserService
   ) { }
 
-  @Get()
-  hello() {
-    return "hello"
-  }
-
   @Post("/hello")
   @UseJwtAuth()
   @UseFilesHandler()
