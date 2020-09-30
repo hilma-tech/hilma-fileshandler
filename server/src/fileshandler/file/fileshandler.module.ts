@@ -6,7 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
-import {  UserModule } from '@hilma/auth-nest';
+import { UserModule } from '@hilma/auth-nest';
 
 //file permission
 import { FilePermissionModule } from '../filePermission/filePermission.module';
@@ -85,7 +85,7 @@ export class FilesHandlerModule {
         });
     }
 
-    private static findFolderPath(relativaePath: string): string {
-        return path.resolve("../../../../../../dist", relativaePath);
+    private static findFolderPath(relativePath: string): string {
+        return path.resolve(__dirname, "../../../../../../dist", relativePath);
     }
 }
