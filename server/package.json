@@ -1,11 +1,11 @@
 {
   "name": "@hilma/fileshandler-server",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "",
   "author": "Michael Segal <michael@carmel6000.amitnet.org>",
   "private": false,
   "license": "UNLICENSED",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "files": [
     "dist/**/*"
   ],
