@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Res, Req } from '@nestjs/common';
+import { Controller, Body, Post, Res, Req, Get } from '@nestjs/common';
 import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAuth, Roles } from "@hilma/auth-nest";
 
 
@@ -16,20 +16,26 @@ export class AppController {
     private readonly userService: UserService
   ) { }
 
+  @Get()
+  hello() {
+    return "hello"
+  }
+
   @Post("/hello")
   @UseJwtAuth()
   @UseFilesHandler()
   async getHello(@RequestUser() user: RequestUserType, @UploadedFiles() files: FilesType, @Body() body: any): Promise<any> {
     console.log("here")
+    console.log(files)
     // const imagePath = await this.imageService.saveSingleFileInMultipleSizesWithRolePermission(files, "admin");
-    const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user.id);
+    // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user.id);
     // const videoPath = await this.videoService.saveSingleFileWithUserPermission(files, user);
     // console.log(imagePath)
     // console.log(videoPath)
     // console.log(imagePath)
     return {
       // image: imagePath[0],
-      audio: audioPath,
+      // audio: audioPath,
       // video: videoPath
     };
   }
@@ -67,8 +73,10 @@ export class AppController {
   @Post("/multiple")
   @UseFilesHandler()
   async multiple(@UploadedFiles() files: FilesType, @Body() body: { id: number, link: string }[]): Promise<any> {
-    const res = await Promise.all(body.map(item => this.imageService.saveWithRolePermission(files, item.id, "admin")))
-    console.log(res);
-    console.log(body);
+    console.log(files);
+    return { success: true };
+    // const res = await Promise.all(body.map(item => this.imageService.saveWithRolePermission(files, item.id, "admin")))
+    // console.log(res);
+    // console.log(body);
   }
 }
