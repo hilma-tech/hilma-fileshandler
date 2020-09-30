@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { ConfigModule } from '@nestjs/config';
 import { FilesHandlerModule } from './fileshandler/file/fileshandler.module';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule, RoleModule } from '@hilma/auth-nest';
+import configuration from './auth-config/configuration';
+
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -16,6 +19,7 @@ import { UserModule, RoleModule } from '@hilma/auth-nest';
       },
       autoAllow: false
     }),
+    ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
     TypeOrmModule.forRoot(),
     UserModule,
     RoleModule
