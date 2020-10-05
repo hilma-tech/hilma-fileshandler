@@ -14,7 +14,7 @@ export const MIME_TYPES: {
         jpg: "image/jpeg",
         png: "image/png",
         jpeg: "image/jpeg",
-        gif: "image/gif",
+        // gif: "image/gif",
         // svg: "image/svg+xml",
     },
     audio: {

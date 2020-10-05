@@ -12,7 +12,7 @@ export const ACCEPTS: { [key in FileType]: string[] } = {
         "jpg",
         "png",
         "jpeg",
-        "gif",
+        // "gif",
         // "svg"
     ],
     audio: [
