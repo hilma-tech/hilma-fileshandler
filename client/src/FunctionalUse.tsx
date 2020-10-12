@@ -23,8 +23,8 @@ const FunctionalUse: React.FC = () => {
     }
 
 
-    const handleImageChange = (e: { target: { value: { link: string, id: number } } }): void => {
-        setImageObj(e.target.value);
+    const handleImageChange = ( value: { link: string, id: number }): void => {
+        setImageObj(value);
     };
 
 

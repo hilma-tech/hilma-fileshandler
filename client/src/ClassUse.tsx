@@ -44,7 +44,7 @@ class ClassUse extends React.Component<ClassUseProps, ClassUseState> {
         return (
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 class
-                <FilesInput filesUploader={this.props.filesUploader} type="image" onChange={(e: { target: { value: { link: string; id: number } } }) => this.setState({ image: e.target.value })} />
+                <FilesInput filesUploader={this.props.filesUploader} type="image" onChange={(value: { link: string; id: number }) => this.setState({ image: value })} />
                 <button onClick={this.handleSend}>send</button>
                 {
                     this.state.image

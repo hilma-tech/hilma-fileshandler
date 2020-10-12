@@ -6,7 +6,7 @@ import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
 
 interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
-    onChange?: (e: { target: { value: UploadedFile[] } }) => void;
+    onChange?: (value: UploadedFile[]) => void;
     filesUploader: FilesUploader;
     type: FileType;
     singleUpload?: boolean;
@@ -31,11 +31,7 @@ const MultipleFilesInput: FC<FileInputProps> = props => {
         }
 
         if (onChange) {
-            onChange({
-                target: {
-                    value: uploadsRes
-                }
-            });
+            onChange(uploadsRes);
         }
 
         if (!singleUpload) {
