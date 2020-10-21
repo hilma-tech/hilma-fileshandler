@@ -67,8 +67,11 @@ export class AppController {
 
   @Post("/multiple")
   @UseFilesHandler()
-  async multiple(@UploadedFiles() files: FilesType, @Body() body: { id: number, link: string }[]): Promise<any> {
+  async multiple(@UploadedFiles() files: FilesType, @Body() body: any): Promise<any> {
     console.log(files);
+    const path = await this.imageService.save(files, body.imageId);
+    console.log(path)
+    console.log("here")
     return { success: true };
     // const res = await Promise.all(body.map(item => this.imageService.saveWithRolePermission(files, item.id, "admin")))
     // console.log(res);
