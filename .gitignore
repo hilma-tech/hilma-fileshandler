@@ -3,3 +3,4 @@
 /client/node_modules
 /client/build
 /client-native/node_modules
+/client-native-package/node_modules
