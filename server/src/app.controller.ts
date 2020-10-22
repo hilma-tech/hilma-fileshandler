@@ -72,7 +72,7 @@ export class AppController {
     const path = await this.imageService.save(files, body.imageId);
     console.log(path)
     console.log("here")
-    return { success: true };
+    return { success: true, image: path };
     // const res = await Promise.all(body.map(item => this.imageService.saveWithRolePermission(files, item.id, "admin")))
     // console.log(res);
     // console.log(body);
