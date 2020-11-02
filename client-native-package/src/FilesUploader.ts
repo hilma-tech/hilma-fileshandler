@@ -1,27 +1,55 @@
-import { MIME_TYPES } from './consts';
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import { MIME_TYPES, FILES_HANDLER_NAME } from './consts';
 
 class FilesUploader {
     private uploadedFiles: { uri: string, mimeType: string, id: number }[] = [];
     private nextId = 0;
 
     fetch(input: RequestInfo, init: RequestInit): Promise<Response> {
-        const fd = new FormData();
-
-        this.uploadedFiles.forEach(uploadedFile => {
-            fd.append("FilesHandler", {
-                uri: uploadedFile.uri,
-                type: uploadedFile.mimeType,
-                name: uploadedFile.id.toString()
-            } as any);
-        });
-
-        const data = init.body;
-        fd.append("data", data as string);
-
+        const fd = this.createFormData(init.body);
         init.body = fd;
-
         return fetch(input, init);
     }
+
+    post<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+        const fd = this.createFormData(data);
+        return axios.post(url, fd, config);
+    }
+
+    put<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+        const fd = this.createFormData(data);
+        return axios.put(url, fd, config);
+    }
+
+    patch<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+        const fd = this.createFormData(data);
+        return axios.patch(url, fd, config);
+    }
+
+    request<T = any, R = AxiosResponse<T>>(config: AxiosRequestConfig): Promise<R> {
+        const fd = this.createFormData(config.data);
+        config.data = fd;
+        return axios.request(config);
+    }
+
+    createFormData(data: RequestInit["body"]): FormData {
+        const fd = new FormData();
+        this.uploadedFiles.forEach(uploadedFile => {
+            fd.append(FILES_HANDLER_NAME,
+                {
+                    uri: uploadedFile.uri,
+                    type: uploadedFile.mimeType,
+                    name: uploadedFile.id.toString()
+                } as any
+            );
+        });
+
+        fd.append("data", data as string);
+
+        return fd;
+    }
+
+
 
     addFile(uri: string): number {
         const id = this.nextId;

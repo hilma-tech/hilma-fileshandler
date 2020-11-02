@@ -31,3 +31,5 @@ export const MIME_TYPES: {
         mov: "video/quicktime",
     }
 }
+
+export const FILES_HANDLER_NAME = "FilesHandler";
