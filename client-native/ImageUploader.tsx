@@ -34,12 +34,22 @@ function ImageUploader() {
     const send = async () => {
         try {
 
-            const data = await filesUploader.fetch("http://10.11.54.217:8080/multiple", {
+            // const data = await filesUploader.fetch("http://10.11.54.217:8080/multiple", {
+            //     method: "POST",
+            //     body: JSON.stringify({ imageId: id })
+            // });
+            // const res2 = await data.json();
+            // console.log(res2)
+
+            // const res = await filesUploader.post("http://10.11.54.217:8080/multiple", JSON.stringify({ imageId: id }))
+            // console.log(res.data)
+
+            const res = await filesUploader.request({
+                url: "http://10.11.54.217:8080/multiple",
                 method: "POST",
-                body: JSON.stringify({ imageId: id })
+                data: JSON.stringify({ imageId: id })
             });
-            const res2 = await data.json();
-            console.log(res2)
+            console.log(res.data)
         } catch (err) {
             console.log("error")
             console.log(err)
