@@ -5,6 +5,7 @@ import useFiles from './fileshandler/useFiles';
 import FunctionalUse from './FunctionalUse';
 import ClassUse from './ClassUse';
 import MultipleFilesUse from './MultipleFilesUse';
+import AxiosUse from './AxiosUse';
 
 function App() {
   const filesUploader = useFiles();
@@ -98,6 +99,7 @@ function App() {
           showMultiple &&
           <MultipleFilesUse />
         }
+        <AxiosUse />
       </header>
 
     </div>
