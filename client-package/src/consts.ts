@@ -31,3 +31,5 @@ export const ACCEPTS: { [key in FileType]: string[] } = {
         "mov"
     ]
 }
+
+export const FILES_HANDLER_NAME = "FilesHandler";
