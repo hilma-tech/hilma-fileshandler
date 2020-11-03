@@ -1,6 +1,6 @@
 {
   "name": "@hilma/fileshandler-server",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "",
   "author": "Michael Segal <michael@carmel6000.amitnet.org>",
   "private": false,
@@ -29,7 +29,6 @@
     "@nestjs/common": "^7.0.0"
   },
   "dependencies": {
-    "@hilma/auth-nest": "^0.1.22",
     "@nestjs/config": "^0.5.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/jwt": "^7.1.0",
@@ -47,6 +46,7 @@
     "typeorm": "^0.2.25"
   },
   "devDependencies": {
+    "@hilma/auth-nest": "^0.1.22",
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.0.0",
