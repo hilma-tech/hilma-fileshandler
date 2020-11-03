@@ -9,7 +9,7 @@ export default (): AuthConfig => ({
 
 	app_name_he: "פיילסהנדלר",
 
-	roleAccessConfig: {
+	roleAccess: {
 		CUSTOMER: {
 			components: [
 				"CustomerHome"

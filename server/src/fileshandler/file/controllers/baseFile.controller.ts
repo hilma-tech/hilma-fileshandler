@@ -14,8 +14,7 @@ export abstract class BaseFileController {
     ) { }
 
     @Get("*")
-    @UseJwtInterceptor
-    // @UseInterceptors(GetUserInterceptor)
+    @UseJwtInterceptor()
     async getFile(@Req() req: Request, @Res() res: Response, @RequestUser() user: RequestUserType) {
         const { url } = req;
 
