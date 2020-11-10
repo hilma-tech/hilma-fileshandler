@@ -17,7 +17,8 @@ import { AppController } from './app.controller';
         l: 1200,
         xl: 1600
       },
-      autoAllow: true
+      // autoAllow: true
+      defaultAllow: true
     }),
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
     TypeOrmModule.forRoot(),

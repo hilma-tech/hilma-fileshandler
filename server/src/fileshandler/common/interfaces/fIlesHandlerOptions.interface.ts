@@ -7,4 +7,5 @@ export interface FilesHandlerOptions {
     };
     permissionsFilter?: PermissionsFilterType;
     autoAllow?: boolean;
+    defaultAllow?: boolean;
 }

@@ -7,7 +7,7 @@ import { PermissionEnum } from './enums/permission.enum';
 import { getAuthenticatedPermissionRules, getUnauthenticatedPermissionRules } from './permissionRules';
 import { PermissionRule } from './permissionRule.type';
 
-export async function permissionsFilter(path: string, user: RequestUserType | null, autoAllow: boolean = false): Promise<boolean> {
+export async function permissionsFilter(path: string, user: RequestUserType | null, defaultAllow: boolean = false): Promise<boolean> {
 
     const permissions: any = await getConnection()
         .createQueryBuilder()
@@ -62,7 +62,7 @@ export async function permissionsFilter(path: string, user: RequestUserType | nu
         }
     }
 
-    if (autoAllow) {
+    if (defaultAllow) {
         return true;
     }
 
