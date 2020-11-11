@@ -5,7 +5,7 @@ import * as randomstring from 'randomstring';
 
 import { MIME_TYPES } from '../../../common/consts';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
-import { FilePermissionService } from '../../../filePermission/filePermission.service';
+import { FilePermissionService } from '../../../filePermissionMysql/filePermission.service';
 import { FilesType } from '../../../common/types/files.type';
 
 export abstract class BaseFilesService {

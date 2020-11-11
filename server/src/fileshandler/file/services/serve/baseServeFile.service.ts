@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { MIME_TYPES } from '../../../common/consts';
-import { permissionsFilter } from '../../../filePermission/permissionsFilter';
+import { permissionsFilter } from '../../../filePermissionMysql/permissionsFilter';
 
 export class BaseServeFileService {
 

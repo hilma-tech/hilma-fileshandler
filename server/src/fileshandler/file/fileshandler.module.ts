@@ -8,7 +8,7 @@ import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
 
 //file permission
-import { FilePermissionModule } from '../filePermission/filePermission.module';
+import { FilePermissionModule } from '../filePermissionMysql/filePermission.module';//' /filePermission.module';
 
 //controllers
 import { ImageController } from './controllers/image.controller';

@@ -1,5 +1,5 @@
 
-export function GetJwtAuthInterceptor() {
+export function GetJwtAuthInterceptor(): <TFunction extends Function, Y>(target: object | TFunction, propertyKey?: string | symbol, descriptor?: TypedPropertyDescriptor<Y>) => void {
     try {
         const { UseJwtInterceptor } = require("@hilma/auth-nest");
         return UseJwtInterceptor();

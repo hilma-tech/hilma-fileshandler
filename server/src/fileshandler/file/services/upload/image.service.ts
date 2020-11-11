@@ -9,7 +9,7 @@ import * as sharp from 'sharp';
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
-import { FilePermissionService } from '../../../filePermission/filePermission.service';
+import { FilePermissionService } from '../../../filePermissionMysql/filePermission.service';
 import { FilesType } from '../../../common/types/files.type';
 
 @Injectable()
