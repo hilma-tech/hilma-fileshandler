@@ -26,13 +26,13 @@ export class BaseServeFileService {
     public async validatePathWithPermissions(url: string, user: RequestUserType): Promise<void> {
         this.validatePath(url);
 
-        if (this.options.autoAllow) {
+        if (this.options.permissionsOptions.autoAllow) {
             return;
         }
 
         const path = this.getPathForPermission(url);
-        const permissionsFilterFunc = this.options.permissionsFilter || permissionsFilter;
-        const allow = await permissionsFilterFunc(path, user, this.options.defaultAllow);
+        const permissionsFilterFunc = this.options.permissionsOptions.permissionsFilter || permissionsFilter;
+        const allow = await permissionsFilterFunc(path, user, this.options.permissionsOptions.defaultAllow);
         if (!allow) {
             throw new ForbiddenException();
         }

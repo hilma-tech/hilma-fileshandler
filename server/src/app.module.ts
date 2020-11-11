@@ -18,7 +18,10 @@ import { AppController } from './app.controller';
         xl: 1600
       },
       // autoAllow: true
-      defaultAllow: true
+      permissionsOptions: {
+        type: "mysql",
+        defaultAllow: true
+      }
     }),
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
     TypeOrmModule.forRoot(),

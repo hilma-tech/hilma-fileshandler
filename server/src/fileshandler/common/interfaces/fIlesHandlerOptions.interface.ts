@@ -5,7 +5,11 @@ export interface FilesHandlerOptions {
     imageSizes?: {
         [sizeName: string]: number;
     };
-    permissionsFilter?: PermissionsFilterType;
-    autoAllow?: boolean;
-    defaultAllow?: boolean;
+    
+    permissionsOptions: {
+        type: "mysql" | "mongodb" | "none";
+        permissionsFilter?: PermissionsFilterType;
+        autoAllow?: boolean;
+        defaultAllow?: boolean;
+    };
 }
