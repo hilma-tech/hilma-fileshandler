@@ -1,10 +1,10 @@
 import { Get, Req, Res, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as fs from 'fs';
-import { RequestUser, RequestUserType, UseJwtInterceptor } from '@hilma/auth-nest';
+import { RequestUser, RequestUserType } from '@hilma/auth-nest';
 
 import { BaseServeFileService } from '../services/serve/baseServeFile.service';
-// import { GetUserInterceptor } from '../../common/interceptors/getUser.interceptor';
+import { GetJwtAuthInterceptor } from '../../common/decorators/getJwtAuthInterceptor.decorator';
 
 export abstract class BaseFileController {
 
@@ -14,7 +14,7 @@ export abstract class BaseFileController {
     ) { }
 
     @Get("*")
-    @UseJwtInterceptor()
+    @GetJwtAuthInterceptor()
     async getFile(@Req() req: Request, @Res() res: Response, @RequestUser() user: RequestUserType) {
         const { url } = req;
 
