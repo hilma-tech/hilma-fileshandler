@@ -4,7 +4,8 @@ export default (): AuthConfig => ({
 	auth: {
         ttl: {
             admin: 3.154e+10
-        }
+		},
+		accessToken_cookie: "kdjldskadlkjsad"
     },
 
 	app_name_he: "פיילסהנדלר",
