@@ -46,6 +46,7 @@
     "typeorm": "^0.2.25"
   },
   "devDependencies": {
+    "@hilma/auth-mongo-nest": "^0.1.8",
     "@hilma/auth-nest": "^0.1.22",
     "@nestjs/cli": "^7.0.0",
     "@nestjs/schematics": "^7.0.0",
