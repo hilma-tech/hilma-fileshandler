@@ -1,5 +1,7 @@
 /server/node_modules
 /server/dist
+/base-server/node_modules
+/base/dist
 /client/node_modules
 /client/build
 /client-native/node_modules
