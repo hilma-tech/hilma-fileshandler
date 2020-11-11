@@ -1,7 +1,7 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
-import { RequestUserType } from '@hilma/auth-nest';
 import * as path from 'path';
 
+import { RequestUserType } from '../../../common/types/requestUser.type';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { MIME_TYPES } from '../../../common/consts';
 import { permissionsFilter } from '../../../filePermissionMysql/permissionsFilter';

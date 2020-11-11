@@ -1,4 +1,4 @@
-import { RequestUserType } from "@hilma/auth-nest";
+import { RequestUserType } from "../common/types/requestUser.type";
 
 import { PermissionRule } from "./permissionRule.type";
 import { PermissionTypeEnum } from './enums/permissionType.enum';

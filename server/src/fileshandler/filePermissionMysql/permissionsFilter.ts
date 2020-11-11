@@ -1,5 +1,5 @@
 import { getConnection, Brackets } from 'typeorm';
-import { RequestUserType } from "@hilma/auth-nest";
+import { RequestUserType } from "../common/types/requestUser.type";
 import { FilePermission } from './filePermission.entity';
 import { SPECIAL_ROLES } from '../common/consts';
 import { PermissionTypeEnum } from './enums/permissionType.enum';
