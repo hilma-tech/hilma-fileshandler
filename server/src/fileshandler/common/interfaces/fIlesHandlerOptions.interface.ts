@@ -7,7 +7,6 @@ export interface FilesHandlerOptions {
     };
     
     permissionsOptions: {
-        type: "mysql" | "mongodb" | "none";
         permissionsFilter?: PermissionsFilterType;
         autoAllow?: boolean;
         defaultAllow?: boolean;
