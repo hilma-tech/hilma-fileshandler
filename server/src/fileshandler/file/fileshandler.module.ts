@@ -6,7 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
-import { UserModule } from '@hilma/auth-nest';
 
 //file permission
 import { FilePermissionModule } from '../filePermission/filePermission.module';
@@ -31,7 +30,6 @@ import { ServeVideoService } from './services/serve/serveVideo.service';
 
 @Module({
     imports: [
-        UserModule,
         JwtModule.register({}),
         FilePermissionModule
     ],

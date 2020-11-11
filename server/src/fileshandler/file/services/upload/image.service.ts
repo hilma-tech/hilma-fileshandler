@@ -5,7 +5,6 @@ import * as fs from 'fs';
 import { imageSize } from 'image-size';
 import * as sharp from 'sharp';
 
-import { RequestUserType } from '@hilma/auth-nest';
 
 import { BaseFilesService } from './baseFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';

@@ -1,5 +1,4 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-// import { User, Role } from '@hilma/auth-nest';
 
 import { PermissionEnum } from "./enums/permission.enum";
 import { PermissionTypeEnum } from "./enums/permissionType.enum";
