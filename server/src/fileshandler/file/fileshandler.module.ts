@@ -32,7 +32,7 @@ import { ServeVideoService } from './services/serve/serveVideo.service';
 @Module({
     imports: [
         UserModule,
-        JwtModule.register({ secret: "secretKey" }),
+        JwtModule.register({}),
         FilePermissionModule
     ],
     controllers: [
@@ -67,7 +67,7 @@ export class FilesHandlerModule {
         FilesHandlerModule.createFolders(options);
 
         return {
-            global: true, 
+            global: true,
             module: FilesHandlerModule,
             providers: [
                 {
