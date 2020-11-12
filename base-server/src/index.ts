@@ -2,11 +2,13 @@
 export * from './fileshandler/common/decorators/filesHandler.decorator';
 export * from './fileshandler/common/interfaces/fIlesHandlerOptions.interface';
 export * from './fileshandler/common/types/permissionsFilter.type';
+export * from './fileshandler/common/consts';
 
 //fileshandler module
 export * from './fileshandler/file/fileshandler.module';
 
 //services
+export * from './fileshandler/file/services/upload/baseFile.service';
 export * from './fileshandler/file/services/upload/image.service';
 export * from './fileshandler/file/services/upload/audio.service';
 export * from './fileshandler/file/services/upload/file.service';
