@@ -1,8 +1,14 @@
 /server/node_modules
 /server/dist
+
 /base-server/node_modules
 /base/dist
+
+/permissions/fileshandler-typeorm/node_modules
+/permissions/fileshandler-typeorm/dist
+
 /client/node_modules
 /client/build
+
 /client-native/node_modules
 /client-native-package/node_modules
