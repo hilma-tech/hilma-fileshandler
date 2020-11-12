@@ -17,3 +17,10 @@ export * from './fileshandler/file/services/upload/video.service';
 //exports from other modules - only for convinient
 export { UploadedFiles } from '@nestjs/common';
 export * from './fileshandler/common/types/files.type';
+
+//global permissions
+export * from './fileshandler/permissions/enums/permission.enum';
+export * from './fileshandler/permissions/enums/permissionType.enum';
+export * from './fileshandler/permissions/permissionRule.type';
+export * from './fileshandler/permissions/permissionRules';
+export * from './fileshandler/common/types/requestUser.type';
