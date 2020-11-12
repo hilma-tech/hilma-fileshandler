@@ -1,6 +1,6 @@
 {
   "name": "@hilma/fileshandler-typeorm",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "",
   "author": "Michael Segal <michael@carmel6000.amitnet.org>",
   "private": false,

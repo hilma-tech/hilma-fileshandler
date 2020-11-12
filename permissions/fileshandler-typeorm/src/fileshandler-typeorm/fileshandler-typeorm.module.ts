@@ -9,19 +9,20 @@ import { VideoTypeormService } from './services/videoTypeorm.service';
 import { FilesHandlerTypeormOptions } from './common/interfaces/fIlesHandlerOptions.interface';
 
 @Module({
+    imports: [
+        FilePermissionModule
+    ],
     providers: [
         ImageTypeormService,
         AudioTypeormService,
         FileTypeormService,
         VideoTypeormService,
-        FilePermissionModule
     ],
     exports: [
         ImageTypeormService,
         AudioTypeormService,
         FileTypeormService,
         VideoTypeormService,
-        FilePermissionModule
     ]
 })
 export class FilesHandlerTypeormModule {
