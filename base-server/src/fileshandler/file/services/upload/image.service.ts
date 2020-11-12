@@ -189,4 +189,11 @@ export class ImageService extends BaseFilesService {
         const parts = path.split(".");
         return parts[parts.length - 1];
     }
+
+
+    public getPathForPermission(pathInSize: string): string {
+        const [typeAndName, _, extension] = pathInSize.split(".");
+        const pathForPermission = `${typeAndName}.${extension}`;
+        return pathForPermission;
+    }
 }
