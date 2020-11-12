@@ -7,9 +7,18 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "./dist",
+    "rootDir": "./src",
     "baseUrl": "./",
-    "incremental": true
-  }
+    "incremental": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src/index.ts",
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
