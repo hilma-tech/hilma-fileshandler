@@ -4,8 +4,8 @@
   "description": "",
   "author": "Michael Segal <michael@carmel6000.amitnet.org>",
   "private": false,
-  "main": "dist/index.js",
   "license": "UNLICENSED",
+  "main": "dist/index.js",
   "files": [
     "dist/**/*"
   ],
