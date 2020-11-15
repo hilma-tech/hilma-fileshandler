@@ -26,3 +26,5 @@ export class FilePermission {
     @Prop([String])
     deniedRoles: string[];
 }
+
+export const FilePermissionSchema = SchemaFactory.createForClass(FilePermission);
