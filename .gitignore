@@ -7,6 +7,9 @@
 /permissions/fileshandler-typeorm/node_modules
 /permissions/fileshandler-typeorm/dist
 
+/permissions/fileshandler-mongoose/node_modules
+/permissions/fileshandler-mongoose/dist
+
 /client/node_modules
 /client/build
 
