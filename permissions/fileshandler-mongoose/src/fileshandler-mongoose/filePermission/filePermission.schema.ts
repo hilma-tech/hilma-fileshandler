@@ -14,16 +14,28 @@ export class FilePermission {
     })
     path: string;
 
-    @Prop([Types.ObjectId])
+    @Prop({
+        type: [Types.ObjectId],
+        default: undefined
+    })
     allowedUsers: Types.ObjectId[];
 
-    @Prop([Types.ObjectId])
+    @Prop({
+        type: [Types.ObjectId],
+        default: undefined
+    })
     deniedUsers: Types.ObjectId[];
 
-    @Prop([String])
+    @Prop({
+        type: [String],
+        default: undefined
+    })
     allowedRoles: string[];
 
-    @Prop([String])
+    @Prop({
+        type: [String],
+        default: undefined
+    })
     deniedRoles: string[];
 }
 
