@@ -43,4 +43,10 @@ export class FilePermissionService {
         }).exec();
     }
 
+    public async deletePermission(path: string) : Promise<void> {
+        await this.filePermissionModel.deleteOne({
+            path
+        }).exec();
+    }
+
 }
