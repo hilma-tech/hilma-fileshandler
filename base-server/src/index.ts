@@ -24,3 +24,4 @@ export * from './fileshandler/permissions/enums/permissionType.enum';
 export * from './fileshandler/permissions/permissionRule.type';
 export * from './fileshandler/permissions/permissionRules';
 export * from './fileshandler/common/types/requestUser.type';
+export * from './fileshandler/common/interfaces/permissionsFilter.interface';

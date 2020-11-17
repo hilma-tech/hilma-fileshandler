@@ -1,15 +1,17 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Request } from 'express';
 import * as path from 'path';
 
 import { RequestUserType } from '../../../common/types/requestUser.type';
 import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
 import { MIME_TYPES } from '../../../common/consts';
-import { Request } from 'express';
+import { PermissionsFilterInterface } from '../../../common/interfaces/permissionsFilter.interface';
 
 export class BaseServeFileService {
 
     constructor(
         protected readonly options: FilesHandlerOptions,
+        private readonly permissionsFiter: PermissionsFilterInterface,
         private readonly fileType: string
     ) { }
 
@@ -31,11 +33,11 @@ export class BaseServeFileService {
         }
 
         const path = this.getPathForPermission(url);
-        if (!this.options.permissionsFilter) {
+        if (!this.permissionsFiter) {
             throw new ForbiddenException();
         }
 
-        const allow = await this.options.permissionsFilter(path, user, req);
+        const allow = await this.permissionsFiter.hasAccess(path, user, req);
         if (!allow) {
             throw new ForbiddenException();
         }

@@ -52,3 +52,5 @@ export const SPECIAL_ROLES = {
     AUTHENTICATED: "$authenticated",
     UNAUTHENTICATED: "$unauthenticated"
 };
+
+export const PERMISSIONS_FILTER = "permissionsFilter";

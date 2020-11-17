@@ -68,9 +68,11 @@ export class FilesHandlerModule {
                 {
                     provide: FILESHANDLER_OPTIONS_SIGN,
                     useValue: options
-                }
-            ]
-        }
+                },
+                ...(options.providers || [])
+            ],
+            imports: options.imports
+        };
     }
 
     static createFolders(options: FilesHandlerOptions): void {
