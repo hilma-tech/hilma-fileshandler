@@ -11,8 +11,6 @@ export class AppController {
     private readonly imageService: ImageMongooseService
   ) { }
 
-
-
   @Post("/hello")
   @UseJwtAuth()
   @UseFilesHandler()
