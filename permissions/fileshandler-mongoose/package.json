@@ -1,13 +1,18 @@
 {
-  "name": "fileshandler-mongoose",
-  "version": "0.0.1",
+  "name": "@hilma/fileshandler-mongoose",
+  "version": "0.0.4",
   "description": "",
-  "author": "",
-  "private": true,
+  "author": "Michael Segal <michael@carmel6000.amitnet.org>",
+  "private": false,
   "license": "UNLICENSED",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build",
+    "build": "tsc",
+    "prepare": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
