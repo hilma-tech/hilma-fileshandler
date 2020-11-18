@@ -4,7 +4,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from '@hilma/auth-mongo-nest';
 
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { configuration } from './config/configuration';
 import { FilesHandlerMongooseModule } from './fileshandler-mongoose/fileshandler-mongoose.module';
 
@@ -26,6 +25,6 @@ import { FilesHandlerMongooseModule } from './fileshandler-mongoose/fileshandler
     })
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule { }
