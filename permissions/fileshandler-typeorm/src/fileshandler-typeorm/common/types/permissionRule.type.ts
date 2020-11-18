@@ -1,3 +1,3 @@
-import { PermissionTypeEnum } from "./enums/permissionType.enum";
+import { PermissionTypeEnum } from "../enums/permissionType.enum";
 
 export type PermissionRule = { permissionType: PermissionTypeEnum, role?: string | string[] };

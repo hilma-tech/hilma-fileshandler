@@ -1,8 +1,7 @@
-import { RequestUserType } from "../common/types/requestUser.type";
+import { RequestUserType, SPECIAL_ROLES } from "@hilma/fileshandler-server";
 
-import { PermissionRule } from "./permissionRule.type";
+import { PermissionRule } from "./types/permissionRule.type";
 import { PermissionTypeEnum } from './enums/permissionType.enum';
-import { SPECIAL_ROLES } from '../common/consts';
 
 export const getAuthenticatedPermissionRules = (user: RequestUserType): PermissionRule[] => ([
     {
