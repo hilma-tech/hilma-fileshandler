@@ -6,7 +6,7 @@ import { UserModule } from '@hilma/auth-mongo-nest';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { configuration } from './config/configuration';
-import { FileshandlerMongooseModule } from './fileshandler-mongoose/fileshandler-mongoose.module';
+import { FilesHandlerMongooseModule } from './fileshandler-mongoose/fileshandler-mongoose.module';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { FileshandlerMongooseModule } from './fileshandler-mongoose/fileshandler
       load: [configuration]
     }),
     UserModule,
-    FileshandlerMongooseModule.register({
+    FilesHandlerMongooseModule.register({
       folder: "/home/michael/filesHandlerUploads/first",
       imageSizes: {
         s: 100,

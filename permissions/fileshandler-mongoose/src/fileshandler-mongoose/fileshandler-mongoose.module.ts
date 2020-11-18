@@ -2,10 +2,10 @@ import { FilesHandlerModule, PERMISSIONS_FILTER, FilesHandlerOptions } from '@hi
 import { DynamicModule, Module } from '@nestjs/common';
 import { PermissionsFilterService } from './filePermission/permissionsFilter.service';
 import { FilePermissionModule } from './filePermission/filePermission.module';
-import { AudioTypeormService } from './services/audioTypeorm.service';
-import { FileTypeormService } from './services/fileTypeorm.service';
-import { ImageTypeormService } from './services/imageTypeorm.service';
-import { VideoTypeormService } from './services/videoTypeorm.service';
+import { AudioMongooseService } from './services/audioMongoose.service';
+import { FileMongooseService } from './services/fileMongoose.service';
+import { ImageMongooseService } from './services/imageMongoose.service';
+import { VideoMongooseService } from './services/videoMongoose.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FilePermission, FilePermissionSchema } from './filePermission/filePermission.schema';
 
@@ -14,19 +14,19 @@ import { FilePermission, FilePermissionSchema } from './filePermission/filePermi
         FilePermissionModule
     ],
     providers: [
-        ImageTypeormService,
-        AudioTypeormService,
-        FileTypeormService,
-        VideoTypeormService,
+        ImageMongooseService,
+        AudioMongooseService,
+        FileMongooseService,
+        VideoMongooseService,
     ],
     exports: [
-        ImageTypeormService,
-        AudioTypeormService,
-        FileTypeormService,
-        VideoTypeormService,
+        ImageMongooseService,
+        AudioMongooseService,
+        FileMongooseService,
+        VideoMongooseService,
     ]
 })
-export class FileshandlerMongooseModule {
+export class FilesHandlerMongooseModule {
     static register(options: FilesHandlerOptions): DynamicModule {
         if (!options.providers) {
             options.providers = [
@@ -42,7 +42,7 @@ export class FileshandlerMongooseModule {
         }
 
         return {
-            module: FileshandlerMongooseModule,
+            module: FilesHandlerMongooseModule,
             global: true,
             imports: [
                 FilesHandlerModule.register(options)

@@ -1,11 +1,11 @@
 import { Injectable, } from '@nestjs/common';
 import { Types } from 'mongoose';
 import { ImageService, FilesType } from '@hilma/fileshandler-server';
-import { BaseTypeormService } from './baseTypeorm.service';
+import { BaseMongooseService } from './baseMongoose.service';
 import { FilePermissionService } from '../filePermission/filePermission.service';
 
 @Injectable()
-export class ImageTypeormService extends BaseTypeormService {
+export class ImageMongooseService extends BaseMongooseService {
     protected readonly uploadService: ImageService;
 
     constructor(

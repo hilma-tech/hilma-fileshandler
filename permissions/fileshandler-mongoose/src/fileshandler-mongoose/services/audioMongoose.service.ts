@@ -1,10 +1,10 @@
 import { Injectable,  } from '@nestjs/common';
 import { AudioService } from '@hilma/fileshandler-server';
-import { BaseTypeormService } from './baseTypeorm.service';
+import { BaseMongooseService } from './baseMongoose.service';
 import { FilePermissionService } from '../filePermission/filePermission.service';
 
 @Injectable()
-export class AudioTypeormService extends BaseTypeormService {
+export class AudioMongooseService extends BaseMongooseService {
     constructor(
         audioService: AudioService,
         filePermissionService: FilePermissionService

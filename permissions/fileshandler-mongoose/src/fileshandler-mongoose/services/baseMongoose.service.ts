@@ -2,7 +2,7 @@ import { BaseFilesService, FilesType } from '@hilma/fileshandler-server';
 import { FilePermissionService } from '../filePermission/filePermission.service';
 import { Types } from 'mongoose';
 
-export abstract class BaseTypeormService {
+export abstract class BaseMongooseService {
     constructor(
         protected readonly uploadService: BaseFilesService,
         protected readonly filePermissionService: FilePermissionService

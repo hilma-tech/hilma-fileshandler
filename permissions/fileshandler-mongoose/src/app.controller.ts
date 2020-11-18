@@ -2,13 +2,13 @@ import { Controller, Body, Post, Res } from '@nestjs/common';
 import { UserService, User, UseLocalAuth, RequestUser, RequestUserType, UseJwtAuth, Roles } from "@hilma/auth-mongo-nest";
 import { Response } from 'express';
 import { UseFilesHandler, UploadedFiles, FilesType} from '@hilma/fileshandler-server';
-import { ImageTypeormService } from './fileshandler-mongoose/services/imageTypeorm.service';
+import { ImageMongooseService } from './fileshandler-mongoose/services/imageMongoose.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly userService: UserService,
-    private readonly imageService: ImageTypeormService
+    private readonly imageService: ImageMongooseService
   ) { }
 
 
