@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import {PermissionEnum, PermissionTypeEnum} from '@hilma/fileshandler-server'; 
+import { PermissionEnum } from "../common/enums/permission.enum";
+import { PermissionTypeEnum } from "../common/enums/permissionType.enum";
 
 import { FilePermission } from './filePermission.entity';
 

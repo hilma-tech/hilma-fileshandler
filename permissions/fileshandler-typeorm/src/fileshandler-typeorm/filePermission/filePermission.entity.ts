@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { PermissionEnum, PermissionTypeEnum } from '@hilma/fileshandler-server';
+import { PermissionEnum } from '../common/enums/permission.enum';
+import { PermissionTypeEnum } from '../common/enums/permissionType.enum';
 
 @Entity()
 export class FilePermission {
@@ -25,8 +26,6 @@ export class FilePermission {
         nullable: true,
     })
     roleName: string;
-    // @ManyToOne(type => Role, role => role.name)
-    // role: any;
 
     @Column({
         type: "uuid",
@@ -34,8 +33,6 @@ export class FilePermission {
         nullable: true
     })
     userId: string;
-    // @ManyToOne(type => User, user => user.id)
-    // user: User;
 
 
     @Column({

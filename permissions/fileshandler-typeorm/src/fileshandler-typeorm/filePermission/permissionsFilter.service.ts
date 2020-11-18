@@ -1,19 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Brackets, Repository } from 'typeorm';
-import { Request } from 'express'
-import {
-    RequestUserType,
-    SPECIAL_ROLES,
-    PermissionTypeEnum,
-    PermissionEnum,
-    getAuthenticatedPermissionRules,
-    getUnauthenticatedPermissionRules,
-    PermissionRule,
-    PermissionsFilterInterface
-} from '@hilma/fileshandler-server';
+import { RequestUserType, SPECIAL_ROLES, PermissionsFilterInterface } from '@hilma/fileshandler-server';
+import { Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
+
 import { FilePermission } from './filePermission.entity';
 import { DEFAULT_ALLOW } from '../common/consts';
+import { PermissionEnum } from "../common/enums/permission.enum";
+import { PermissionTypeEnum } from "../common/enums/permissionType.enum";
+import { getAuthenticatedPermissionRules, getUnauthenticatedPermissionRules } from "../common/permissionRules";
+import { PermissionRule } from "../common/types/permissionRule.type";
 
 @Injectable()
 export class PermissionsFilterService implements PermissionsFilterInterface {
@@ -39,7 +35,7 @@ export class PermissionsFilterService implements PermissionsFilterInterface {
             }))
             .getMany();
 
-        const rules: PermissionRule[] =
+        const rules =
             user
                 ?
                 getAuthenticatedPermissionRules(user)
