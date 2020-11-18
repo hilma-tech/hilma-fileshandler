@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { JwtModule } from '@nestjs/jwt';
 
-import { FilesHandlerOptions } from '../common/interfaces/fIlesHandlerOptions.interface';
+import { FilesHandlerOptions } from '../common/interfaces/filesHandlerOptions.interface';
 import { FILE_TYPES, FILESHANDLER_OPTIONS_SIGN } from '../common/consts';
 
 

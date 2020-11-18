@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 
 import { BaseFilesService } from './baseFile.service';
-import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
+import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES } from '../../../common/consts';
 
 @Injectable()

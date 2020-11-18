@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as randomstring from 'randomstring';
 
 import { MIME_TYPES } from '../../../common/consts';
-import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
+import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
 import { FilesType } from '../../../common/types/files.type';
 
 export abstract class BaseFilesService {

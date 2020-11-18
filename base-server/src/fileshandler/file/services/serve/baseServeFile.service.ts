@@ -3,7 +3,7 @@ import { Request } from 'express';
 import * as path from 'path';
 
 import { RequestUserType } from '../../../common/types/requestUser.type';
-import { FilesHandlerOptions } from '../../../common/interfaces/fIlesHandlerOptions.interface';
+import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
 import { MIME_TYPES } from '../../../common/consts';
 import { PermissionsFilterInterface } from '../../../common/interfaces/permissionsFilter.interface';
 

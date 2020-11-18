@@ -1,5 +1,4 @@
 import { ModuleMetadata } from '@nestjs/common';
-import { PermissionsFilterType } from "../types/permissionsFilter.type";
 
 export interface FilesHandlerOptions {
     folder: string;
