@@ -54,6 +54,8 @@ class FilesUploader {
         this.uploadedFiles.forEach(uploadedFile => {
             URL.revokeObjectURL(uploadedFile.link);
         });
+
+        this.uploadedFiles = [];
     }
 
     upload(file: File): UploadedFile {
