@@ -1,7 +1,7 @@
 import { SchemaFactory, Prop, Schema } from '@nestjs/mongoose';
-import * as mongoose from 'mongoose';
+import { Document, Types } from 'mongoose';
 
-export type FilePermissionDocument = mongoose.Document & FilePermission;
+export type FilePermissionDocument = Document & FilePermission;
 
 @Schema()
 export class FilePermission {
@@ -15,10 +15,10 @@ export class FilePermission {
     path: string;
 
     @Prop({
-        type: [mongoose.Types.ObjectId],
+        type: [Types.ObjectId],
         default: undefined
     })
-    users: any[];
+    users: Types.ObjectId[];
 
     @Prop({
         type: [String],
