@@ -71,8 +71,9 @@ class FilesUploader {
         this.nextId++;
 
         return {
-            id: id,
-            link
+            id,
+            link,
+            type: file.type
         };
     }
 }
