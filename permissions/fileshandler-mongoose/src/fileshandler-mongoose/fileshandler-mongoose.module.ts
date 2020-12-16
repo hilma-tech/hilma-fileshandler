@@ -24,6 +24,7 @@ import { FilePermission, FilePermissionSchema } from './filePermission/filePermi
         AudioMongooseService,
         FileMongooseService,
         VideoMongooseService,
+        FilePermissionModule
     ]
 })
 export class FilesHandlerMongooseModule {
