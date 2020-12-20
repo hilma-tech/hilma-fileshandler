@@ -73,7 +73,8 @@ class FilesUploader {
         return {
             id,
             link,
-            type: file.type
+            type: file.type,
+            fileName: file.name
         };
     }
 }
