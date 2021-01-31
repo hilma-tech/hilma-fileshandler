@@ -12,17 +12,17 @@ class FilesUploader {
         return fetch(input, init);
     }
 
-    post<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+    post<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
         const fd = this.createFormData(data);
         return axios.post(url, fd, config);
     }
 
-    put<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+    put<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
         const fd = this.createFormData(data);
         return axios.put(url, fd, config);
     }
 
-    patch<T = any, R = AxiosResponse<T>>(url: string, data?: string, config?: AxiosRequestConfig): Promise<R> {
+    patch<T = any, R = AxiosResponse<T>>(url: string, data?: any, config?: AxiosRequestConfig): Promise<R> {
         const fd = this.createFormData(data);
         return axios.patch(url, fd, config);
     }
@@ -33,12 +33,16 @@ class FilesUploader {
         return axios.request(config);
     }
 
-    createFormData(data: RequestInit["body"]): FormData {
+    createFormData(data: any): FormData {
         const fd = new FormData();
         this.uploadedFiles.forEach(uploadedFile => {
             fd.append(FILES_HANDLER_NAME, uploadedFile.file, uploadedFile.id.toString());
         });
 
+        if (typeof data !== "string") {
+            data = JSON.stringify(data);
+        }
+        
         fd.append("data", data as string);
 
         return fd;
