@@ -55,7 +55,7 @@ class FilesUploader {
         const id = this.nextId;
         const mimeType = this.findMimeType(uri);
 
-        //think more about this!!
+        //TODO: think more about this!!
         if (!mimeType) {
             throw new Error("unsupported file type");
         }
