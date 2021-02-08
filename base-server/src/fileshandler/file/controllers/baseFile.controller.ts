@@ -17,17 +17,17 @@ export abstract class BaseFileController {
     @Get("*")
     @GetJwtAuthInterceptor()
     async getFile(@Req() req: Request, @Res() res: Response, @GetRequestUser() user: RequestUserType) {
-        const { url } = req;
+        const { path } = req;
 
         try {
-            await this.fileService.validatePathWithPermissions(url, user, req);
+            await this.fileService.validatePathWithPermissions(path, user, req);
         } catch (err) {
             throw err;
         }
 
-        const absolutePath = this.fileService.getAbsolutePath(url);
-        const mimetype = this.fileService.getMimeType(url);
-        const extension = this.fileService.getExtension(url);
+        const absolutePath = this.fileService.getAbsolutePath(path);
+        const mimetype = this.fileService.getMimeType(path);
+        const extension = this.fileService.getExtension(path);
         try {
             const data = await fs.promises.readFile(absolutePath);
             res.header('Content-disposition', `inline; filename=thi3is@fi1E.${extension}`);
