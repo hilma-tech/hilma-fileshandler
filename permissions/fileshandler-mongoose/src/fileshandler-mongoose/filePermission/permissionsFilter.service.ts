@@ -22,7 +22,7 @@ export class PermissionsFilterService implements PermissionsFilterInterface {
                     {
                         $or: [
                             {
-                                users: Types.ObjectId(user.id)
+                                users: Types.ObjectId(user._id)
                             },
                             {
                                 roles: user.roles

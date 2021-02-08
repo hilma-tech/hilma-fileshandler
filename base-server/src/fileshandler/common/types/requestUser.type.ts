@@ -1,5 +1,6 @@
 export interface RequestUserType {
-    id: string;
+    id?: string;
+    _id?: string;
     username: string;
     type: string;
     roles: string[];
