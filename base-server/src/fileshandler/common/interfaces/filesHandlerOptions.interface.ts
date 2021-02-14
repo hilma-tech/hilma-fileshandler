@@ -1,4 +1,5 @@
 import { ModuleMetadata } from '@nestjs/common';
+import { FILE_MAX_SIZES } from '../consts';
 
 export interface FilesHandlerOptions {
     folder: string;
@@ -6,8 +7,9 @@ export interface FilesHandlerOptions {
         [sizeName: string]: number;
     };
 
-    // permissionsFilter?: PermissionsFilterType;
     imports?: ModuleMetadata["imports"]
     providers?: ModuleMetadata["providers"];
     autoAllow?: boolean;
+
+    sizes?: Partial<typeof FILE_MAX_SIZES>;
 }

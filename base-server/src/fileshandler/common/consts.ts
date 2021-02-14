@@ -54,3 +54,11 @@ export const SPECIAL_ROLES = {
 };
 
 export const PERMISSIONS_FILTER = "permissionsFilter";
+
+export const FILE_MAX_SIZES = {
+    image: 5000,
+    audio: 50000,
+    file: 500,
+    video: 50000
+}
+
