@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useFiles from './fileshandler/useFiles';
 import FileInput from './fileshandler/FileInput';
+import { UploadError } from './fileshandler/UploadError.interface';
 
 const AxiosUse: React.FC = () => {
     const filesUploader = useFiles();
@@ -22,6 +23,10 @@ const AxiosUse: React.FC = () => {
         setImageObj(value);
     };
 
+    const handleError = (error: UploadError) => {
+        console.log(error)
+    }
+
 
 
     return (
@@ -29,7 +34,7 @@ const AxiosUse: React.FC = () => {
 
 
             axios
-            <FileInput style={{}} type="image" filesUploader={filesUploader} onChange={handleImageChange} />
+            <FileInput style={{}} type="image" filesUploader={filesUploader} onChange={handleImageChange} onError={handleError} />
             {
                 imageObj &&
                 <img src={imageObj.link} />

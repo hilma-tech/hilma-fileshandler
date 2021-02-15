@@ -8,16 +8,16 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly imageService: ImageService
-    
-    ) { }
+
+  ) { }
 
 
 
   @Post("/hello")
   @UseFilesHandler()
   async getHello(@UploadedFiles() files: FilesType, @Body() body: any): Promise<any> {
-    console.log("here")
-    console.log(files)
+    // console.log("here")
+    // console.log(files)
     const imagePath = await this.imageService.saveSingleFileInMultipleSizes(files);
     // const audioPath = await this.audioService.saveSingleFileWithUserPermission(files, user.id);
     // const videoPath = await this.videoService.saveSingleFileWithUserPermission(files, user);
@@ -26,6 +26,19 @@ export class AppController {
     // console.log(imagePath)
     return {
       image: imagePath[0],
+      // audio: audioPath,
+      // video: videoPath
+    };
+  }
+
+  @Post("/multiple")
+  @UseFilesHandler(200)
+  async getMultiple(@UploadedFiles() files: FilesType): Promise<any> {
+    // console.log(files[0].size)
+    // const imagePath = [] //await this.imageService.saveSingleFileInMultipleSizes(files);
+
+    return {
+      // image: imagePath[0],
       // audio: audioPath,
       // video: videoPath
     };
