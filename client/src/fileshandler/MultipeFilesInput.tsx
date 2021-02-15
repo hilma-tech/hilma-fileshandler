@@ -1,28 +1,53 @@
 import React, { FC, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { ACCEPTS, TYPES } from './consts';
+import { ACCEPTS, FILE_MAX_SIZES, MIME_TYPES, TYPES } from './consts';
 import FilesUploader from './FilesUploader';
 import UploadedFile from './UploadedFile.interface';
-import FileType from './FileType.type';
+import BaseFileInputProps from './BaseFileInputProps';
+import useAccept from './useAccept';
 
-interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+interface FileInputProps extends BaseFileInputProps {
     onChange?: (value: UploadedFile[]) => void;
-    filesUploader: FilesUploader;
-    type: FileType;
-    singleUpload?: boolean;
 }
 
 const MultipleFilesInput: FC<FileInputProps> = props => {
-    const { onChange, filesUploader, type, singleUpload = true, ...otherProps } = props;
+    const { onChange, filesUploader, type, singleUpload = true, onError, sizeLimit, ...otherProps } = props;
 
     const lastUploadedFiles = useRef<UploadedFile[] | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const files = e.target.files;
+        const files = e.target.files as FileList;
 
         if (!files) {
             return;
         }
+
+        for (let i = 0; i < files.length; i++) {
+            if (!MIME_TYPES[type].includes(files[i].type)) {
+                if (onError) {
+                    onError({
+                        type: "wrong-type",
+                        mimeType: files[i].type
+                    });
+                }
+                return;
+            }
+        }
+
+        const maxSize = sizeLimit || FILE_MAX_SIZES[type];
+
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].size / 1000 > maxSize) {
+                if (onError) {
+                    onError({
+                        type: "file-size",
+                        size: files[i].size
+                    });
+                }
+                return;
+            }
+        }
+
 
         const uploadsRes: UploadedFile[] = [];
 
@@ -47,7 +72,7 @@ const MultipleFilesInput: FC<FileInputProps> = props => {
         lastUploadedFiles.current = uploadsRes;
     }
 
-    const accept = useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
+    const accept = useAccept(type);//useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
 
     return (
         <input type="file" onChange={handleChange} accept={accept} {...otherProps} multiple />
@@ -58,7 +83,9 @@ MultipleFilesInput.propTypes = {
     type: PropTypes.oneOf(TYPES).isRequired,
     filesUploader: PropTypes.instanceOf(FilesUploader).isRequired,
     onChange: PropTypes.func,
-    singleUpload: PropTypes.bool
+    onError: PropTypes.func,
+    singleUpload: PropTypes.bool,
+    sizeLimit: PropTypes.number
 };
 
 export default MultipleFilesInput;

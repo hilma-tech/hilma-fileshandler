@@ -14,12 +14,14 @@ const MultipleFilesUse: React.FC<{}> = props => {
         });
     }
 
+    
+
     return (
         <div>
             <button onClick={send}>
                 send
             </button>
-            <MultipleFilesInput type="image" filesUploader={filesUploader} onChange={setImages} />
+            <MultipleFilesInput type="image" sizeLimit={200} filesUploader={filesUploader} onChange={setImages} onError={console.log} />
             {
                 images.map(image => (
                     <div key={image.id}>

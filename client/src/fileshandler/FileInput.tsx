@@ -3,16 +3,11 @@ import PropTypes from 'prop-types';
 import { ACCEPTS, TYPES, MIME_TYPES, FILE_MAX_SIZES } from './consts';
 import FilesUploader from './FilesUploader';
 import UploadedFile from './UploadedFile.interface';
-import FileType from './FileType.type';
-import { UploadError } from './UploadError.interface';
+import BaseFileInputProps from './BaseFileInputProps';
+import useAccept from './useAccept';
 
-interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "onError"> {
+interface FileInputProps extends BaseFileInputProps {
     onChange?: (value: UploadedFile) => void;
-    onError?: (err: UploadError) => void;
-    filesUploader: FilesUploader;
-    type: FileType;
-    singleUpload?: boolean;
-    sizeLimit?: number;
 }
 
 const FileInput: FC<FileInputProps> = props => {
@@ -66,7 +61,7 @@ const FileInput: FC<FileInputProps> = props => {
         lastUploadedFile.current = uploadRes;
     }
 
-    const accept = useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
+    const accept = useAccept(type);//useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
 
     return (
         <input type="file" onChange={handleChange} accept={accept} {...otherProps} />
@@ -79,6 +74,7 @@ FileInput.propTypes = {
     onChange: PropTypes.func,
     onError: PropTypes.func,
     singleUpload: PropTypes.bool,
+    sizeLimit: PropTypes.number
 };
 
 export default FileInput;
