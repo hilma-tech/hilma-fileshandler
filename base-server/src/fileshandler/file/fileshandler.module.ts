@@ -44,7 +44,7 @@ import { ServeVideoService } from './services/serve/serveVideo.service';
         ServeImageService,
         ServeAudioService,
         ServeFileService,
-        ServeVideoService,
+        ServeVideoService
     ],
     exports: [
         ImageService,
@@ -71,7 +71,13 @@ export class FilesHandlerModule {
                 },
                 ...(options.providers || [])
             ],
-            imports: options.imports
+            imports: options.imports,
+            exports: [
+                {
+                    provide: FILESHANDLER_OPTIONS_SIGN,
+                    useValue: options
+                }
+            ]
         };
     }
 
