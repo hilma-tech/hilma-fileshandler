@@ -65,3 +65,10 @@ export const MIME_TYPES: {
 }
 
 export const FILES_HANDLER_NAME = "FilesHandler";
+
+export const FILE_MAX_SIZES = {
+    image: 5000,
+    audio: 50000,
+    file: 500,
+    video: 50000
+}

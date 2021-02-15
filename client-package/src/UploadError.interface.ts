@@ -1,3 +1,5 @@
 export interface UploadError {
-    mimeType: string;
+    type: "wrong-type" | "file-size";
+    mimeType?: string;
+    size?: number;
 }

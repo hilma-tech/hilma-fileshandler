@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { ACCEPTS, TYPES, MIME_TYPES } from './consts';
+import { ACCEPTS, TYPES, MIME_TYPES, FILE_MAX_SIZES } from './consts';
 import FilesUploader from './FilesUploader';
 import UploadedFile from './UploadedFile.interface';
 import FileType from './FileType.type';
@@ -12,10 +12,11 @@ interface FileInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement
     filesUploader: FilesUploader;
     type: FileType;
     singleUpload?: boolean;
+    sizeLimit?: number;
 }
 
 const FileInput: FC<FileInputProps> = props => {
-    const { onChange, filesUploader, type, singleUpload = true, onError, ...otherProps } = props;
+    const { onChange, filesUploader, type, singleUpload = true, onError, sizeLimit, ...otherProps } = props;
 
     const lastUploadedFile = useRef<UploadedFile | null>(null);
 
@@ -29,10 +30,22 @@ const FileInput: FC<FileInputProps> = props => {
         if (!MIME_TYPES[type].includes(file.type)) {
             if (onError) {
                 onError({
+                    type: "wrong-type",
                     mimeType: file.type
                 });
             }
+            return;
+        }
 
+        const maxSize = sizeLimit || FILE_MAX_SIZES[type];
+
+        if (file.size / 1000 > maxSize) {
+            if (onError) {
+                onError({
+                    type: "file-size",
+                    size: file.size
+                });
+            }
             return;
         }
 
