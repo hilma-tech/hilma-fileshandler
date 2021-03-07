@@ -68,6 +68,32 @@ export class ImageMongooseService extends BaseMongooseService {
         return paths;
     }
 
+    public async saveBufferInSizeWithUsersPermission(buffer: Buffer, mimetype: string, width: number, userIds: Types.ObjectId[]): Promise<string> {
+        const path = await this.uploadService.saveBufferInSize(buffer, mimetype, width);
+        this.filePermissionService.saveUsersPermission(path, userIds);
+        return path;
+    }
+
+    public async saveBufferInSizeWithRolesPermission(buffer: Buffer, mimetype: string, width: number, roleNames: string[]): Promise<string> {
+        const path = await this.uploadService.saveBufferInSize(buffer, mimetype, width);
+        this.filePermissionService.saveRolesPermission(path, roleNames);
+        return path;
+    }
+
+    public async saveBufferInMultipleSizesWithUsersPermission(buffer: Buffer, mimetype: string, userIds: Types.ObjectId[]): Promise<string[]> {
+        const paths = await this.uploadService.saveBufferInMultipleSizes(buffer, mimetype);
+        const pathForPermission = this.uploadService.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveUsersPermission(pathForPermission, userIds);
+        return paths;
+    }
+
+    public async saveBufferInMultipleSizesWithRolesPermission(buffer: Buffer, mimetype: string, roleNames: string[]): Promise<string[]> {
+        const paths = await this.uploadService.saveBufferInMultipleSizes(buffer, mimetype);
+        const pathForPermission = this.uploadService.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveRolesPermission(pathForPermission, roleNames);
+        return paths;
+    }
+
     public async deleteMultipleSizesWithPermission(imagePath: string): Promise<void> {
         await this.uploadService.deleteMultipleSizes(imagePath);
         const pathForPermission = this.uploadService.getPathForPermission(imagePath);
