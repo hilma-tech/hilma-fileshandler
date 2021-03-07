@@ -16,30 +16,34 @@ export class ImageService extends BaseFilesService {
         super(options, FILE_TYPES.IMAGE);
     }
 
-    public async saveInSize(files: FilesType, clientFileId: number, width: number): Promise<string> {
+    public saveInSize(files: FilesType, clientFileId: number, width: number): Promise<string> {
         const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
 
         if (!file) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const extension = this.findExtension(file.mimetype);
+        return this.saveBufferInSize(file.buffer, file.mimetype, width);
+    }
+
+    public async saveBufferInSize(buffer: Buffer, mimetype: string, width: number): Promise<string> {
+        const extension = this.findExtension(mimetype);
 
         if (!extension) {
-            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
+            throw new Error(`FilesHandler: cannot save file, its mimetype (${mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
         }
 
         const fileName = await this.createUniqueFileName(extension);
         const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, `${fileName}.${extension}`);
         const filePath = `/${FILE_TYPES.IMAGE}/${fileName}.${extension}`;
 
-        const imageDimensions = imageSize(file.buffer);
+        const imageDimensions = imageSize(buffer);
         const imageWidth = imageDimensions.width;
 
         if (width >= imageWidth) {
-            await fs.promises.writeFile(fileAbsolutePath, file.buffer);
+            await fs.promises.writeFile(fileAbsolutePath, buffer);
         } else {
-            await sharp(file.buffer).resize(width).toFile(fileAbsolutePath);
+            await sharp(buffer).resize(width).toFile(fileAbsolutePath);
         }
 
         return filePath;
@@ -67,14 +71,18 @@ export class ImageService extends BaseFilesService {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const extension = this.findExtension(file.mimetype);
+        return this.saveBufferInMultipleSizes(file.buffer, file.mimetype);
+    }
+
+    public async saveBufferInMultipleSizes(buffer: Buffer, mimetype: string): Promise<string[]> {
+        const extension = this.findExtension(mimetype);
         if (!extension) {
-            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
+            throw new Error(`FilesHandler: cannot save file, its mimetype (${mimetype}) is not supported for file type ${FILE_TYPES.IMAGE}.`);
         }
 
         const fileName = await this.createUniqueFileName(extension);
 
-        const imageDimensions = imageSize(file.buffer);
+        const imageDimensions = imageSize(buffer);
         const imageWidth = imageDimensions.width;
 
         const possibleSizes = Object.entries(this.options.imageSizes).filter(([sizeName, width]) => imageWidth >= width);
@@ -82,7 +90,7 @@ export class ImageService extends BaseFilesService {
         if (possibleSizes.length > 0) {
             const savePromises = possibleSizes.map(([sizeName, width]) => {
                 const fileAbsolutePath = path.join(this.options.folder, FILE_TYPES.IMAGE, fileName + "." + sizeName + "." + extension);
-                return sharp(file.buffer).resize(width).toFile(fileAbsolutePath);
+                return sharp(buffer).resize(width).toFile(fileAbsolutePath);
             });
 
             await Promise.all(savePromises);
@@ -91,8 +99,9 @@ export class ImageService extends BaseFilesService {
             return filePaths;
         }
 
+        // in case the file is too small, save it in its original size
         const smallestSizeName = this.getSmallestSizeName();
-        await this.saveFile(file.buffer, fileName, `${smallestSizeName}.${extension}`);
+        await this.saveFile(buffer, fileName, `${smallestSizeName}.${extension}`);
 
         return [`/${FILE_TYPES.IMAGE}/${fileName}.${smallestSizeName}.${extension}`];
     }

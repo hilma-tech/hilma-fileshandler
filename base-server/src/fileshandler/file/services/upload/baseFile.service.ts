@@ -13,21 +13,25 @@ export abstract class BaseFilesService {
         private readonly fileType: string,
     ) { }
 
-    public async save(files: FilesType, clientFileId: number): Promise<string> {
+    public save(files: FilesType, clientFileId: number): Promise<string> {
         const file = files.find(fileAndExt => fileAndExt.originalname === clientFileId.toString());
 
         if (!file) {
             throw new Error(`FilesHandler: cannot save file ${clientFileId}, file doesn't exist`);
         }
 
-        const extension = this.findExtension(file.mimetype);
+        return this.saveBuffer(file.buffer, file.mimetype)
+    }
+
+    public async saveBuffer(buffer: Buffer, mimetype: string): Promise<string> {
+        const extension = this.findExtension(mimetype);
         if (!extension) {
-            throw new Error(`FilesHandler: cannot save file ${clientFileId}, its mimetype (${file.mimetype}) is not supported for file type ${this.fileType}.`);
+            throw new Error(`FilesHandler: cannot save file, its mimetype (${mimetype}) is not supported for file type ${this.fileType}.`);
         }
 
         const fileName = await this.createUniqueFileName(extension);
 
-        await this.saveFile(file.buffer, fileName, extension);
+        await this.saveFile(buffer, fileName, extension);
 
         const filePath = `/${this.fileType}/${fileName}.${extension}`;
         return filePath;
@@ -55,7 +59,7 @@ export abstract class BaseFilesService {
      * this method's goal is to create a unique file name
      * the reason this method is async is that we don't want to block the thread from responding to other requests
      * 
-     * the reason we use fs.stat instead of fs.exists is that fs.exists is depreacated.
+     * the reason we use fs.access instead of fs.exists is that fs.exists is depreacated.
      * In NodeJS's documentation it is recommended to use fs.access, so in order to check if a file exists, 
      * we check if an error was thrown from fs.access
      */
