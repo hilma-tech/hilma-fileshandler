@@ -33,6 +33,18 @@ export abstract class BaseTypeormService {
         return path;
     }
 
+    public async saveBufferWithUserPermission(buffer: Buffer, mimetype: string, userId: string): Promise<string> {
+        const path = await this.uploadService.saveBuffer(buffer, mimetype);
+        await this.filePermissionService.saveUserPermission(path, userId);
+        return path;
+    }
+
+    public async saveBufferWithRolePermission(buffer: Buffer, mimetype: string, roleName: string): Promise<string> {
+        const path = await this.uploadService.saveBuffer(buffer, mimetype);
+        await this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
+    }
+
 
 
     public async deleteWithPermissions(filePath: string): Promise<void> {

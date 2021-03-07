@@ -71,6 +71,33 @@ export class ImageTypeormService extends BaseTypeormService {
     }
 
 
+    public async saveBufferInSizeWithUserPermission(buffer: Buffer, mimetype: string, width: number, userId: string): Promise<string> {
+        const path = await this.uploadService.saveBufferInSize(buffer, mimetype, width);
+        this.filePermissionService.saveUserPermission(path, userId);
+        return path;
+    }
+
+    public async saveBufferInSizeWithRolePermission(buffer: Buffer, mimetype: string, width: number, roleName: string): Promise<string> {
+        const path = await this.uploadService.saveBufferInSize(buffer, mimetype, width);
+        this.filePermissionService.saveRolePermission(path, roleName);
+        return path;
+    }
+
+    public async saveBufferInMultipleSizesWithUserPermission(buffer: Buffer, mimetype: string, userId: string): Promise<string[]> {
+        const paths = await this.uploadService.saveBufferInMultipleSizes(buffer, mimetype);
+        const pathForPermission = this.uploadService.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveUserPermission(pathForPermission, userId);
+        return paths;
+    }
+
+    public async saveBufferInMultipleSizesWithRolePermission(buffer: Buffer, mimetype: string, roleName: string): Promise<string[]> {
+        const paths = await this.uploadService.saveBufferInMultipleSizes(buffer, mimetype);
+        const pathForPermission = this.uploadService.getPathForPermission(paths[0]);
+        await this.filePermissionService.saveRolePermission(pathForPermission, roleName);
+        return paths;
+    }
+
+
     public async deleteMultipleSizesWithPermissions(imagePath: string): Promise<void> {
         await this.uploadService.deleteMultipleSizes(imagePath);
         const pathForPermission = this.uploadService.getPathForPermission(imagePath);
