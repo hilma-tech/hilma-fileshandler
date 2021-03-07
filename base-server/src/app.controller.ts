@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UploadedFiles, Body } from '@nestjs/common';
+import { Controller, Get, Post, UploadedFiles, Body, HttpService } from '@nestjs/common';
 import { AppService } from './app.service';
 import { UseFilesHandler } from './fileshandler/common/decorators/filesHandler.decorator';
 import { FilesType } from './fileshandler/common/types/files.type'
@@ -7,8 +7,8 @@ import { ImageService } from './fileshandler/file/services/upload/image.service'
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly imageService: ImageService
-
+    private readonly imageService: ImageService,
+    private readonly httpService: HttpService
   ) { }
 
 
@@ -42,5 +42,16 @@ export class AppController {
       // audio: audioPath,
       // video: videoPath
     };
+  }
+
+  @Get("/upload-buffer")
+  async uploadBuffer(): Promise<any> {
+    const url = "http://t.wallpaperweb.org/wallpaper/animals/1600x1200/Underwater_Wallpaper_36.jpg";
+    const res = await this.httpService.get<Buffer>(url, { responseType: "arraybuffer" }).toPromise();
+    const { data } = res;
+    console.log(res.headers)
+    const path = await this.imageService.saveBufferInSize(res.data, res.headers["content-type"], 400)
+    console.log(path)
+    return "<h1 style='text-align: center'>hello buffer</h1>";
   }
 }

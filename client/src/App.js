@@ -48,7 +48,7 @@ function App() {
 
 
   const handleAudioChange = e => {
-    setAudioObj(e.target.value);
+    setAudioObj(e);
   };
 
 

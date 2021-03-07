@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FilesHandlerModule } from './fileshandler/file/fileshandler.module';
@@ -13,7 +13,8 @@ import { FilesHandlerModule } from './fileshandler/file/fileshandler.module';
         l: 600
       },
       
-    })
+    }),
+    HttpModule
   ],
   controllers: [AppController],
   providers: [AppService],
