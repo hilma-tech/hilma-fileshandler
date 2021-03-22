@@ -62,3 +62,4 @@ export const FILE_MAX_SIZES = {
     video: 50000
 }
 
+export const FILES_HANDLER_NAME = "FilesHandler";
