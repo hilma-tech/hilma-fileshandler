@@ -16,26 +16,8 @@ export abstract class BaseFileController {
 
     @Get("*")
     @GetJwtAuthInterceptor()
-    async getFile(@Req() req: Request, @Res() res: Response, @GetRequestUser() user: RequestUserType) {
-        const { path } = req;
-
-        try {
-            await this.fileService.validatePathWithPermissions(path, user, req);
-        } catch (err) {
-            throw err;
-        }
-
-        const absolutePath = this.fileService.getAbsolutePath(path);
-        const mimetype = this.fileService.getMimeType(path);
-        const extension = this.fileService.getExtension(path);
-        try {
-            const data = await fs.promises.readFile(absolutePath);
-            res.header('Content-disposition', `inline; filename=thi3is@fi1E.${extension}`);
-            res.contentType(mimetype);
-            res.send(data);
-        } catch (err) {
-            throw new NotFoundException();
-        }
+    getFile(@Req() req: Request, @Res() res: Response, @GetRequestUser() user: RequestUserType): void {
+        this.fileService.serve(req, res, user);
     }
 
 }

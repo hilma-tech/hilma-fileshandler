@@ -6,6 +6,8 @@ import { PermissionsFilterInterface } from 'src/fileshandler/common/interfaces/p
 
 @Injectable()
 export class ServeAudioService extends BaseServeFileService {
+    protected stream = true;
+
     constructor(
         @Inject(FILESHANDLER_OPTIONS_SIGN) options: FilesHandlerOptions,
         @Optional() @Inject(PERMISSIONS_FILTER) permissionsFilter: PermissionsFilterInterface
