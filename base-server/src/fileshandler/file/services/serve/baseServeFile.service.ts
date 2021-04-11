@@ -117,7 +117,6 @@ export class BaseServeFileService {
     }
 
     private async serveParts(res: Response, req: Request, absolutePath: string): Promise<void> {
-        console.log("parts")
         try {
             const stat = await fs.promises.stat(absolutePath);
             const fileSize = stat.size;
