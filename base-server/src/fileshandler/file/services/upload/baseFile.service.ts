@@ -6,6 +6,8 @@ import { MIME_TYPES } from '../../../common/consts';
 import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
 import { FilesType } from '../../../common/types/files.type';
 
+import { fileExists } from '../../../common/functions/fileExists';
+
 export abstract class BaseFilesService {
 
     constructor(
@@ -59,9 +61,6 @@ export abstract class BaseFilesService {
      * this method's goal is to create a unique file name
      * the reason this method is async is that we don't want to block the thread from responding to other requests
      * 
-     * the reason we use fs.access instead of fs.exists is that fs.exists is depreacated.
-     * In NodeJS's documentation it is recommended to use fs.access, so in order to check if a file exists, 
-     * we check if an error was thrown from fs.access
      */
 
     protected async createUniqueFileName(extension: string): Promise<string> {
@@ -78,14 +77,9 @@ export abstract class BaseFilesService {
         throw new Error(`FilesHandler: cannot create a unique name for ${this.fileType}`);
     }
 
-    protected async fileExists(name: string, extension: string): Promise<boolean> {
+    protected fileExists(name: string, extension: string): Promise<boolean> {
         const filePath = path.join(this.options.folder, this.fileType, name + "." + extension);
-        try {
-            await fs.promises.access(filePath);
-            return true;
-        } catch (err) {
-            return false;
-        }
+        return fileExists(filePath);
     }
 
     protected findFirstFileInType(files: FilesType): globalThis.Express.Multer.File {
