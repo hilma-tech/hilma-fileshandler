@@ -6,6 +6,6 @@ import { FILE_TYPES } from '../../common/consts';
 @Controller(FILE_TYPES.AUDIO)
 export class AudioController extends BaseFileController {
     constructor(audioService: ServeAudioService) {
-        super(audioService, FILE_TYPES.AUDIO);
+        super(audioService);
     }
 }

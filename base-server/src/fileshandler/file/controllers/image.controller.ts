@@ -6,6 +6,6 @@ import { FILE_TYPES } from '../../common/consts';
 @Controller(FILE_TYPES.IMAGE)
 export class ImageController extends BaseFileController {
     constructor(imageService: ServeImageService) {
-        super(imageService, FILE_TYPES.IMAGE);
+        super(imageService);
     }
 }

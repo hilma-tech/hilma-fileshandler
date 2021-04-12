@@ -1,6 +1,5 @@
-import { Get, Req, Res, NotFoundException, UseInterceptors } from '@nestjs/common';
+import { Get, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
-import * as fs from 'fs';
 import { GetRequestUser } from '../../common/decorators/getRequestUser.decorator';
 
 import { BaseServeFileService } from '../services/serve/baseServeFile.service';
@@ -10,14 +9,14 @@ import { GetJwtAuthInterceptor } from '../../common/decorators/getJwtAuthInterce
 export abstract class BaseFileController {
 
     constructor(
-        protected readonly fileService: BaseServeFileService,
-        protected readonly fileType: string
+        protected readonly fileService: BaseServeFileService
     ) { }
 
     @Get("*")
     @GetJwtAuthInterceptor()
-    getFile(@Req() req: Request, @Res() res: Response, @GetRequestUser() user: RequestUserType): void {
-        this.fileService.serve(req, res, user);
+    async getFile(@Req() req: Request, @Res() res: Response, @GetRequestUser() user: RequestUserType): Promise<void> {
+        //we await the 'serve' method so that exceptions will be caught by nestjs
+        await this.fileService.serve(req, res, user);
     }
 
 }
