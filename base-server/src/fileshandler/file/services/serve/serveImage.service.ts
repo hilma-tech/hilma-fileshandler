@@ -1,9 +1,11 @@
-import { Injectable, Inject, BadRequestException, Optional } from '@nestjs/common';
+import { Injectable, Inject, Optional } from '@nestjs/common';
 
 import { BaseServeFileService } from './baseServeFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
 import { FILESHANDLER_OPTIONS_SIGN, FILE_TYPES, MIME_TYPES, PERMISSIONS_FILTER } from '../../../common/consts';
 import { PermissionsFilterInterface } from 'src/fileshandler/common/interfaces/permissionsFilter.interface';
+
+// the image path has a specific shape - so here we override the validation
 
 @Injectable()
 export class ServeImageService extends BaseServeFileService {
