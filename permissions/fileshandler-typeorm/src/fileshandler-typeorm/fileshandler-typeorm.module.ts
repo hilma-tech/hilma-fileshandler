@@ -26,6 +26,7 @@ import { FilePermission } from './filePermission/filePermission.entity';
         AudioTypeormService,
         FileTypeormService,
         VideoTypeormService,
+        FilePermissionModule
     ]
 })
 export class FilesHandlerTypeormModule {
