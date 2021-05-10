@@ -25,10 +25,14 @@ export class PermissionsFilterService implements PermissionsFilterInterface {
                                 users: Types.ObjectId(user._id)
                             },
                             {
-                                roles: user.roles
+                                roles: {
+                                    $in: user.roles
+                                }
                             },
                             {
-                                roles: [SPECIAL_ROLES.AUTHENTICATED, SPECIAL_ROLES.EVERYONE]
+                                roles: {
+                                    $in: [SPECIAL_ROLES.AUTHENTICATED, SPECIAL_ROLES.EVERYONE]
+                                }
                             }
                         ]
                     }
