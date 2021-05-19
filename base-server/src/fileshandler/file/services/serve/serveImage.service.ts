@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional } from '@nestjs/common';
+import { Injectable, Inject, Optional, BadRequestException } from '@nestjs/common';
 
 import { BaseServeFileService } from './baseServeFile.service';
 import { FilesHandlerOptions } from '../../../common/interfaces/filesHandlerOptions.interface';
@@ -16,7 +16,7 @@ export class ServeImageService extends BaseServeFileService {
         super(options, permissionsFilter, FILE_TYPES.IMAGE);
     }
 
-    public validatePath(url: string): number | undefined {
+    protected validatePath(url: string): void {
         const mimetypes = Object.keys(MIME_TYPES[FILE_TYPES.IMAGE]);
         const mimeTypesWithParenthesis = mimetypes.map(mimetype => `(${mimetype})`);
         const sizeNames = this.options.imageSizes ? Object.keys(this.options.imageSizes) : [];
@@ -25,7 +25,7 @@ export class ServeImageService extends BaseServeFileService {
         const regex = new RegExp(`^/${FILE_TYPES.IMAGE}/[0-9a-zA-Z]{32}(\\.(${sizeNamesWithParenthesis.join("|")}))?\\.(${mimeTypesWithParenthesis.join("|")})$`);
 
         if (!url.match(regex)) {
-            return 400;
+            throw new BadRequestException();
         }
     }
 
