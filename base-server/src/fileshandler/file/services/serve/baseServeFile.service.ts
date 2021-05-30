@@ -112,7 +112,11 @@ export abstract class BaseServeFileService {
     }
 
     private async validatePathWithPermissions(url: string, user: RequestUserType, req: Request): Promise<void> {
-        this.validatePath(url);
+        if (!this.options.skipPathValidation) {
+            this.validatePath(url);
+        } else if (url.includes("../")) {
+            throw new BadRequestException();
+        }
 
         const absolutePath = this.getAbsolutePath(url);
         const exists = await fileExists(absolutePath);

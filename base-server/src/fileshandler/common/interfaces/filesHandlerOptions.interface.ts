@@ -12,4 +12,6 @@ export interface FilesHandlerOptions {
     autoAllow?: boolean;
 
     sizes?: Partial<typeof FILE_MAX_SIZES>;
+
+    skipPathValidation?: boolean;
 }
