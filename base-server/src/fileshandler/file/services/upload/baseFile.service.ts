@@ -54,6 +54,14 @@ export abstract class BaseFilesService {
         await fs.promises.unlink(fileAbsolutePath);
     }
 
+    public async deleteIfExists(filePath: string): Promise<void> {
+        const fileAbsolutePath = path.join(this.options.folder, filePath);
+        const exists = await fileExists(fileAbsolutePath);
+        if (exists) {
+            await this.delete(filePath);
+        }
+    }
+
 
     /**
      * 
