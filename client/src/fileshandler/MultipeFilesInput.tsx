@@ -11,7 +11,7 @@ interface FileInputProps extends BaseFileInputProps {
 }
 
 const MultipleFilesInput: FC<FileInputProps> = props => {
-    const { onChange, filesUploader, type, singleUpload = true, onError, sizeLimit, ...otherProps } = props;
+    const { onChange, filesUploader, type, singleUpload = true, onError, sizeLimit, preventDoubleSelection, ...otherProps } = props;
 
     const lastUploadedFiles = useRef<UploadedFile[] | null>(null);
 
@@ -72,10 +72,17 @@ const MultipleFilesInput: FC<FileInputProps> = props => {
         lastUploadedFiles.current = uploadsRes;
     }
 
-    const accept = useAccept(type);//useMemo(() => ACCEPTS[type] ? "." + ACCEPTS[type].join(", .") : "", [type]);
+    // delete the current value, if the user selects the same file twice it will still call "onChange"
+    const handleClick = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+        if (!preventDoubleSelection) {
+            e.currentTarget.value = "";
+        }
+    }
+
+    const accept = useAccept(type);
 
     return (
-        <input type="file" onChange={handleChange} accept={accept} {...otherProps} multiple />
+        <input type="file" onChange={handleChange} onClick={handleClick} accept={accept} {...otherProps} multiple />
     );
 }
 

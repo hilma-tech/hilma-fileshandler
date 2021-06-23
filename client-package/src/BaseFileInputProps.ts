@@ -8,4 +8,5 @@ export default interface BaseFileInputProps extends Omit<React.InputHTMLAttribut
     type: FileType;
     singleUpload?: boolean;
     sizeLimit?: number;
+    preventDoubleSelection?: boolean;
 }
